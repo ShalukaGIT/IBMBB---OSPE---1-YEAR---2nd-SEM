@@ -140,11 +140,14 @@ body { font-family:'Nunito',sans-serif; background:var(--bg);
     .cat-grid { grid-template-columns: 1fr; }
     .header h1 { font-size: 2.2rem; }
     .header p { font-size: 1rem; }
-    .flip-front, .flip-back { min-height: 420px; padding: 1rem; }
+    .flip-front, .flip-back { min-height: 320px; padding: 1rem; }
     .question-text { font-size: 1.2rem; }
     .answer-main { font-size: 1.1rem; }
     .answer-points li { font-size: 1rem; }
     .nav-btn { padding: 0.7rem; font-size: 1.1rem; }
+    .flip-inner { min-height: 320px; }
+    .flip-container { margin-bottom: 2rem; }
+
 }
 
 
@@ -217,13 +220,16 @@ body { background: #766667; }
 <!-- WELCOME GUIDE OVERLAY -->
 <div id="welcome-guide" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(118, 102, 103, 0.95); z-index:9999; justify-content:center; align-items:center; padding:1rem;">
   <div style="background:var(--surface); border:2px solid var(--accent); border-radius:24px; padding:2rem; max-width:500px; width:100%; box-shadow:0 12px 40px rgba(0,0,0,0.4);">
+    
     <h2 style="color:var(--text); margin-bottom:1rem; font-size:1.8rem; text-align:center;">OSPE Flashcards Guide</h2>
-    <ul style="color:var(--text); font-size:1.2rem; line-height:1.6; padding-left:1.5rem; margin-bottom:2rem;">
-      <li style="margin-bottom:0.8rem;">Select a category or choose 'All Categories' to begin.</li>
-      <li style="margin-bottom:0.8rem;">Tap on any card to flip it and reveal the answer.</li>
-      <li style="margin-bottom:0.8rem;">Use 'Got it' or 'Study again' to track your progress and score.</li>
-      <li style="margin-bottom:0.8rem;">You can jump to a specific card number using the bottom input.</li>
+    <ul style="color:var(--text); font-size:1.15rem; line-height:1.5; padding-left:1.5rem; margin-bottom:2rem;">
+      <li style="margin-bottom:0.8rem;"><strong>Getting Started:</strong> Select a specific category (e.g., Microscopy, Calculations) or choose 'All Categories' for a mixed review.</li>
+      <li style="margin-bottom:0.8rem;"><strong>Flipping Cards:</strong> Tap directly on any flashcard to flip it and reveal the detailed answer and rationale.</li>
+      <li style="margin-bottom:0.8rem;"><strong>Progress Tracking:</strong> After flipping a card, use the <strong>'Got it'</strong> (green) or <strong>'Study again'</strong> (red) buttons to track your mastery. Your score is displayed at the bottom!</li>
+      <li style="margin-bottom:0.8rem;"><strong>Navigation:</strong> Use the 'Next' and 'Prev' buttons to cycle through cards, or use the 'Jump to' input at the bottom to skip to a specific question number.</li>
+      <li style="margin-bottom:0.8rem;"><strong>Images & Zoom:</strong> Many cards include real microscopic images or lab setups from your practicals. Study them carefully for the spot exam.</li>
     </ul>
+
     <button onclick="dismissGuide()" style="width:100%; background:var(--accent); color:#766667; border:none; border-radius:50px; padding:1rem; font-family:'Nunito',sans-serif; font-size:1.2rem; font-weight:900; cursor:pointer; transition:all 0.2s;">Start Studying</button>
   </div>
 </div>
@@ -324,14 +330,14 @@ body { background: #766667; }
 <script>
 
 document.addEventListener("DOMContentLoaded", () => {
-  if (!localStorage.getItem("ospeGuideSeen")) {
+  if (!localStorage.getItem("ospeGuideSeenV2")) {
     document.getElementById("welcome-guide").style.display = "flex";
   }
 });
 
 function dismissGuide() {
   document.getElementById("welcome-guide").style.display = "none";
-  localStorage.setItem("ospeGuideSeen", "true");
+  localStorage.setItem("ospeGuideSeenV2", "true");
 }
 
 const CARDS = [
