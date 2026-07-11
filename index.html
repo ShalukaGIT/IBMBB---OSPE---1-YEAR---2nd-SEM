@@ -298,7 +298,7 @@ body { background: #766667; }
       <div class="flip-back" id="flip-back"></div>
     </div>
   </div>
-  <button class="flip-btn" onclick="flipCard()">Tap to flip card</button>
+  <!-- flip-btn removed -->
   <div class="score-row" id="score-row" style="display:none;">
     <button class="score-btn score-got" onclick="markCard(true)">Got it</button>
     <button class="score-btn score-missed" onclick="markCard(false)">Study again</button>
@@ -517,7 +517,7 @@ function startCategory(cat){
   document.getElementById('flashcard-screen').style.display='block';
   document.getElementById('completion').style.display='none';
   document.getElementById('flip-container').style.display='';
-  document.querySelector('.flip-btn').style.display='';
+  // document.querySelector('.flip-btn').style.display='';
   document.querySelector('.btn-row').style.display='';
   document.querySelector('.jump-row').style.display='';
   renderCard('pop');
@@ -596,7 +596,7 @@ function renderCard(anim){
 
 function showCompletion(){
   document.getElementById('flip-container').style.display='none';
-  document.querySelector('.flip-btn').style.display='none';
+  // document.querySelector('.flip-btn').style.display='none';
   document.getElementById('score-row').style.display='none';
   document.querySelector('.btn-row').style.display='none';
   document.querySelector('.jump-row').style.display='none';
@@ -612,7 +612,7 @@ function restartSet(){
   document.getElementById('flip-container').classList.remove('flipped');
   document.getElementById('completion').style.display='none';
   document.getElementById('flip-container').style.display='';
-  document.querySelector('.flip-btn').style.display='';
+  // document.querySelector('.flip-btn').style.display='';
   document.querySelector('.btn-row').style.display='';
   document.querySelector('.jump-row').style.display='';
   renderCard('pop');
