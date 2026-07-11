@@ -3,20 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🧪 OSPE Lab Flashcards</title>
+<title>OSPE Lab Flashcards</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
 :root {
-  --bg: #0f051d; --surface: #1f0c3a; --card-front: #2d1354; --card-back: #0b1e3f;
-  --accent: #c084fc; --accent2: #818cf8; --text: #f3e8ff; --muted: #a78bca;
+  --bg: #766667; 
+  --surface: #A58A89; 
+  --card-front: #A6A3A7; 
+  --card-back: #A58A89;
+  --accent: #DCCBC7; 
+  --accent2: #CBB4B0; 
+  --text: #ffffff; 
+  --muted: #f4f4f4;
 }
 body { font-family:'Nunito',sans-serif; background:var(--bg);
-  background-image:radial-gradient(ellipse at 20% 20%,#4a1080 0%,transparent 50%),radial-gradient(ellipse at 80% 80%,#0c1f4a 0%,transparent 50%);
+  
   min-height:100vh; color:var(--text); display:flex; flex-direction:column; align-items:center; padding:1.5rem 1rem 3rem; }
 .header { text-align:center; margin-bottom:1.5rem; }
 .header h1 { font-size:2.2rem; font-weight:900;
-  background: linear-gradient(135deg,#c084fc,#818cf8,#34d399); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  color: var(--text); }
 .header p { font-size:0.9rem; color:var(--muted); font-weight:600; margin-top:0.25rem; }
 #category-screen { width:100%; max-width:680px; }
 .cat-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:0.75rem; }
@@ -47,19 +53,19 @@ body { font-family:'Nunito',sans-serif; background:var(--bg);
 .flip-container.flipped .flip-inner { transform:rotateY(180deg); }
 .flip-front,.flip-back { position:absolute; width:100%; height:100%; min-height:380px; border-radius:24px; padding:1.5rem;
   backface-visibility:hidden; -webkit-backface-visibility:hidden; display:flex; flex-direction:column; box-shadow:0 12px 40px rgba(0,0,0,0.4); }
-.flip-front { background:var(--card-front); border:1px solid rgba(192,132,252,0.2); align-items:center; justify-content:center; text-align:center; gap:0.8rem; }
-.flip-back { background:var(--card-back); border:1px solid rgba(96,165,250,0.2); transform:rotateY(180deg); justify-content:flex-start; gap:0.5rem; overflow-y:auto; }
+.flip-front { background:var(--card-front); border:1px solid rgba(255,255,255,0.2); align-items:center; justify-content:center; text-align:center; gap:0.8rem; }
+.flip-back { background:var(--card-back); border:1px solid rgba(255,255,255,0.2); transform:rotateY(180deg); justify-content:flex-start; gap:0.5rem; overflow-y:auto; }
 .q-type-badge { font-size:0.7rem; font-weight:900; text-transform:uppercase; letter-spacing:1.5px; padding:0.3rem 1rem; border-radius:50px; }
-.card-img { max-width:100%; max-height:220px; border-radius:14px; object-fit:contain; box-shadow:0 6px 20px rgba(0,0,0,0.4); background:rgba(0,0,0,0.2); padding:4px; }
+.card-img { max-width:100%; max-height:220px; border-radius:14px; object-fit:contain; box-shadow:0 6px 20px rgba(0,0,0,0.4); background:rgba(255,255,255,0.1); padding:4px; }
 .question-text { font-size:1.15rem; font-weight:800; color:var(--text); line-height:1.45; }
 .flip-hint { font-size:0.72rem; font-weight:700; color:rgba(255,255,255,0.35); margin-top:auto; }
 .ans-label { font-size:0.68rem; font-weight:900; text-transform:uppercase; letter-spacing:1.5px; color:var(--accent2); }
-.answer-main { font-size:1.05rem; font-weight:800; color:#a7f3d0; line-height:1.45; margin-bottom:0.3rem;
-  background:rgba(52,211,153,0.15); border:1px solid rgba(52,211,153,0.3); border-radius:12px; padding:0.6rem 0.9rem; }
+.answer-main { font-size:1.05rem; font-weight:800; color:var(--text); line-height:1.45; margin-bottom:0.3rem;
+  background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.2); border-radius:12px; padding:0.6rem 0.9rem; }
 .answer-points { list-style:none; display:flex; flex-direction:column; gap:0.35rem; }
-.answer-points li { display:flex; align-items:flex-start; gap:0.5rem; font-size:0.88rem; font-weight:700; color:#d8b4fe; line-height:1.35; }
+.answer-points li { display:flex; align-items:flex-start; gap:0.5rem; font-size:0.88rem; font-weight:700; color:var(--text); line-height:1.35; }
 .answer-points li::before { content:'▸'; color:var(--accent); flex-shrink:0; margin-top:0.05rem; }
-.back-img { max-width:100%; max-height:180px; border-radius:12px; object-fit:contain; margin:0.3rem 0; background:rgba(0,0,0,0.2); padding:4px; }
+.back-img { max-width:100%; max-height:180px; border-radius:12px; object-fit:contain; margin:0.3rem 0; background:rgba(255,255,255,0.1); padding:4px; }
 .btn-row { display:flex; gap:0.8rem; width:100%; margin-bottom:0.8rem; }
 .nav-btn { flex:1; border:none; border-radius:50px; padding:0.9rem; font-family:'Nunito',sans-serif; font-size:1.05rem; font-weight:900;
   cursor:pointer; transition:all 0.18s; box-shadow:0 5px 18px rgba(0,0,0,0.3); }
@@ -71,7 +77,7 @@ body { font-family:'Nunito',sans-serif; background:var(--bg);
 .btn-next:hover:not(:disabled) { background:linear-gradient(135deg,#1d4ed8,#1e3a8a); }
 .flip-btn { width:100%; border:2px solid rgba(192,132,252,0.4); border-radius:50px; padding:0.7rem;
   background:rgba(192,132,252,0.1); font-family:'Nunito',sans-serif; font-size:0.9rem; font-weight:800; color:var(--accent); cursor:pointer; transition:all 0.18s; margin-bottom:0.8rem; }
-.flip-btn:hover { background:rgba(192,132,252,0.2); }
+.flip-btn:hover { background:rgba(255,255,255,0.1); }
 .jump-row { display:flex; align-items:center; gap:0.5rem; font-size:0.82rem; font-weight:800; color:var(--muted); }
 .jump-row input { width:56px; border-radius:50px; border:2px solid rgba(192,132,252,0.4); padding:0.3rem 0.5rem;
   font-family:'Nunito',sans-serif; font-size:0.85rem; font-weight:800; text-align:center; background:var(--surface); color:var(--text); outline:none; }
@@ -79,13 +85,13 @@ body { font-family:'Nunito',sans-serif; background:var(--bg);
   font-family:'Nunito',sans-serif; font-size:0.82rem; font-weight:900; cursor:pointer; }
 .score-row { display:flex; gap:0.5rem; width:100%; margin-top:0.5rem; }
 .score-btn { flex:1; border:none; border-radius:50px; padding:0.55rem; font-family:'Nunito',sans-serif; font-size:0.82rem; font-weight:900; cursor:pointer; transition:all 0.18s; }
-.score-got { background:rgba(52,211,153,0.2); border:2px solid #34d399; color:#34d399; }
+.score-got { background:rgba(255,255,255,0.1); border:2px solid #34d399; color:var(--text); }
 .score-got:hover { background:rgba(52,211,153,0.35); }
-.score-missed { background:rgba(248,113,113,0.2); border:2px solid #f87171; color:#f87171; }
+.score-missed { background:rgba(255,255,255,0.1); border:2px solid #f87171; color:var(--text); }
 .score-missed:hover { background:rgba(248,113,113,0.35); }
 #completion { display:none; flex-direction:column; align-items:center; text-align:center; gap:1rem; padding:2rem;
   background:var(--surface); border-radius:24px; width:100%; box-shadow:0 12px 40px rgba(0,0,0,0.4); margin-top:1rem; }
-#completion h2 { font-size:1.8rem; font-weight:900; color:#fbbf24; }
+#completion h2 { font-size:1.8rem; font-weight:900; color:var(--text); }
 .restart-btn { background:linear-gradient(135deg,#c084fc,#818cf8); color:#1a0533; border:none; border-radius:50px;
   padding:0.9rem 2rem; font-family:'Nunito',sans-serif; font-size:1rem; font-weight:900; cursor:pointer; transition:all 0.18s; }
 .restart-btn:hover { transform:scale(1.04); }
@@ -96,22 +102,135 @@ body { font-family:'Nunito',sans-serif; background:var(--bg);
 .anim-pop { animation:popIn 0.35s cubic-bezier(.34,1.56,.64,1) both; }
 .anim-right { animation:slideRight 0.3s ease both; }
 .anim-left { animation:slideLeft 0.3s ease both; }
-.type-calc { background:rgba(251,191,36,0.2); color:#fbbf24; border:1px solid rgba(251,191,36,0.4); }
-.type-colour { background:rgba(244,114,182,0.2); color:#f472b6; border:1px solid rgba(244,114,182,0.4); }
-.type-micro { background:rgba(52,211,153,0.2); color:#34d399; border:1px solid rgba(52,211,153,0.4); }
-.type-equip { background:rgba(96,165,250,0.2); color:#60a5fa; border:1px solid rgba(96,165,250,0.4); }
-.type-diag { background:rgba(251,146,60,0.2); color:#fb923c; border:1px solid rgba(251,146,60,0.4); }
-.type-lookup { background:rgba(163,230,53,0.2); color:#a3e635; border:1px solid rgba(163,230,53,0.4); }
-.type-why { background:rgba(192,132,252,0.2); color:#c084fc; border:1px solid rgba(192,132,252,0.4); }
-.type-seq { background:rgba(129,140,248,0.2); color:#818cf8; border:1px solid rgba(129,140,248,0.4); }
-.type-error { background:rgba(248,113,113,0.2); color:#f87171; border:1px solid rgba(248,113,113,0.4); }
-.type-obs { background:rgba(45,212,191,0.2); color:#2dd4bf; border:1px solid rgba(45,212,191,0.4); }
+
+
+
+
+
+
+
+
+
+
+
+/* Font size increases */
+.header h1 { font-size: 2.8rem; color: var(--text); }
+.header p { font-size: 1.2rem; }
+.cat-name { font-size: 1.2rem; margin-bottom: 0.3rem; }
+.cat-count { font-size: 1rem; }
+.cat-btn.all-btn .cat-name { font-size: 1.4rem; }
+.question-text { font-size: 1.4rem; }
+.answer-main { font-size: 1.3rem; }
+.answer-points li { font-size: 1.1rem; }
+.nav-btn { font-size: 1.3rem; }
+.flip-btn { font-size: 1.1rem; }
+.score-btn { font-size: 1.1rem; }
+
+/* Remove old linear gradients from buttons */
+.cat-btn.all-btn { background: var(--surface); }
+.prog-fill { background: var(--accent); }
+.btn-prev { background: #A6A3A7; color: #fff; }
+.btn-next { background: #A6A3A7; color: #fff; }
+.btn-prev:hover:not(:disabled) { background: #CBB4B0; }
+.btn-next:hover:not(:disabled) { background: #CBB4B0; }
+.restart-btn { background: var(--accent); color: #766667; }
+
+/* Mobile responsiveness */
+@media (max-width: 650px) {
+    .cat-grid { grid-template-columns: 1fr; }
+    .header h1 { font-size: 2.2rem; }
+    .header p { font-size: 1rem; }
+    .flip-front, .flip-back { min-height: 420px; padding: 1rem; }
+    .question-text { font-size: 1.2rem; }
+    .answer-main { font-size: 1.1rem; }
+    .answer-points li { font-size: 1rem; }
+    .nav-btn { padding: 0.7rem; font-size: 1.1rem; }
+}
+
+
+/* Palette applied effectively */
+body { background: #766667; }
+.header h1 { color: #DCCBC7; }
+.header p { color: #CBB4B0; }
+
+/* Category Buttons cycling through the palette */
+.cat-btn { border: 2px solid transparent; }
+.cat-btn:nth-child(5n+1) { background: #A58A89; }
+.cat-btn:nth-child(5n+2) { background: #A6A3A7; }
+.cat-btn:nth-child(5n+3) { background: #CBB4B0; }
+.cat-btn:nth-child(5n+4) { background: #DCCBC7; }
+.cat-btn:nth-child(5n+5) { background: #766667; border-color: #DCCBC7; }
+
+/* Text colors for contrast */
+.cat-btn:nth-child(5n+1) .cat-name, .cat-btn:nth-child(5n+1) .cat-count { color: #ffffff; }
+.cat-btn:nth-child(5n+2) .cat-name, .cat-btn:nth-child(5n+2) .cat-count { color: #ffffff; }
+.cat-btn:nth-child(5n+3) .cat-name, .cat-btn:nth-child(5n+3) .cat-count { color: #766667; }
+.cat-btn:nth-child(5n+4) .cat-name, .cat-btn:nth-child(5n+4) .cat-count { color: #766667; }
+.cat-btn:nth-child(5n+5) .cat-name, .cat-btn:nth-child(5n+5) .cat-count { color: #ffffff; }
+
+/* Hover effects */
+.cat-btn:hover { border-color: #ffffff; opacity: 0.9; }
+
+/* Flashcards */
+.flip-front { background: #A58A89; border-color: #DCCBC7; }
+.flip-back { background: #A6A3A7; border-color: #CBB4B0; }
+.question-text { color: #ffffff; }
+.answer-main { background: rgba(255,255,255,0.2); color: #ffffff; border-color: #DCCBC7; }
+.answer-points li { color: #fdfdfd; }
+.answer-points li::before { color: #DCCBC7; }
+
+/* Navigation and Utility Buttons */
+.back-btn { background: #DCCBC7; color: #766667; }
+.back-btn:hover { background: #CBB4B0; color: #ffffff; }
+.counter-badge { background: #A58A89; color: #ffffff; border: 1px solid #DCCBC7; }
+.prog-fill { background: #DCCBC7; }
+
+.flip-btn { background: #A6A3A7; color: #ffffff; border-color: #DCCBC7; }
+.flip-btn:hover { background: #A58A89; }
+
+.btn-prev { background: #A58A89; color: #ffffff; }
+.btn-next { background: #766667; color: #ffffff; border: 1px solid #A6A3A7; }
+.btn-prev:hover:not(:disabled) { background: #A6A3A7; }
+.btn-next:hover:not(:disabled) { background: #A58A89; }
+
+.score-got { background: #A6A3A7; color: #ffffff; border-color: #DCCBC7; }
+.score-missed { background: #CBB4B0; color: #766667; border-color: #A58A89; }
+.score-got:hover { background: #A58A89; }
+.score-missed:hover { background: #DCCBC7; }
+
+.restart-btn { background: #DCCBC7; color: #766667; }
+.restart-btn:hover { background: #CBB4B0; color: #ffffff; }
+.restart-back { background: #A6A3A7; color: #ffffff; border-color: #DCCBC7; }
+
+.jump-row { color: #DCCBC7; }
+.jump-row input { background: #A58A89; color: #ffffff; border-color: #DCCBC7; }
+.jump-go { background: #DCCBC7; color: #766667; }
+
+#completion { background: #A58A89; border: 2px solid #DCCBC7; }
+#completion h2 { color: #ffffff; }
+#completion p { color: #DCCBC7; }
+
 </style>
 </head>
 <body>
 
+<!-- WELCOME GUIDE OVERLAY -->
+<div id="welcome-guide" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(118, 102, 103, 0.95); z-index:9999; justify-content:center; align-items:center; padding:1rem;">
+  <div style="background:var(--surface); border:2px solid var(--accent); border-radius:24px; padding:2rem; max-width:500px; width:100%; box-shadow:0 12px 40px rgba(0,0,0,0.4);">
+    <h2 style="color:var(--text); margin-bottom:1rem; font-size:1.8rem; text-align:center;">OSPE Flashcards Guide</h2>
+    <ul style="color:var(--text); font-size:1.2rem; line-height:1.6; padding-left:1.5rem; margin-bottom:2rem;">
+      <li style="margin-bottom:0.8rem;">Select a category or choose 'All Categories' to begin.</li>
+      <li style="margin-bottom:0.8rem;">Tap on any card to flip it and reveal the answer.</li>
+      <li style="margin-bottom:0.8rem;">Use 'Got it' or 'Study again' to track your progress and score.</li>
+      <li style="margin-bottom:0.8rem;">You can jump to a specific card number using the bottom input.</li>
+    </ul>
+    <button onclick="dismissGuide()" style="width:100%; background:var(--accent); color:#766667; border:none; border-radius:50px; padding:1rem; font-family:'Nunito',sans-serif; font-size:1.2rem; font-weight:900; cursor:pointer; transition:all 0.2s;">Start Studying</button>
+  </div>
+</div>
+
+
 <div class="header">
-  <h1>🧪 OSPE Lab Flashcards</h1>
+  <h1>OSPE Lab Flashcards</h1>
   <p>Lab Exam Prep &middot; MBB1001 &middot; Select a question type to begin</p>
 </div>
 
@@ -119,47 +238,47 @@ body { font-family:'Nunito',sans-serif; background:var(--bg);
 <div id="category-screen">
   <div class="cat-grid">
     <button class="cat-btn all-btn" onclick="startCategory('all')">
-      <span class="cat-icon">⚡</span>
+      
       <div><div class="cat-name">All Categories — Mixed Shuffle</div><div class="cat-count" id="count-all"></div></div>
     </button>
     <button class="cat-btn" onclick="startCategory('colour')">
-      <span class="cat-icon">🎨</span>
+      
       <div><div class="cat-name">Colour Differences</div><div class="cat-count" id="count-colour"></div></div>
     </button>
     <button class="cat-btn" onclick="startCategory('calc')">
-      <span class="cat-icon">🧮</span>
+      
       <div><div class="cat-name">Calculations</div><div class="cat-count" id="count-calc"></div></div>
     </button>
     <button class="cat-btn" onclick="startCategory('micro')">
-      <span class="cat-icon">🔭</span>
+      
       <div><div class="cat-name">Microscopic ID</div><div class="cat-count" id="count-micro"></div></div>
     </button>
     <button class="cat-btn" onclick="startCategory('equip')">
-      <span class="cat-icon">🧰</span>
+      
       <div><div class="cat-name">Equipment / Glassware ID</div><div class="cat-count" id="count-equip"></div></div>
     </button>
     <button class="cat-btn" onclick="startCategory('diag')">
-      <span class="cat-icon">📊</span>
+      
       <div><div class="cat-name">Diagram Labelling</div><div class="cat-count" id="count-diag"></div></div>
     </button>
     <button class="cat-btn" onclick="startCategory('lookup')">
-      <span class="cat-icon">🧪</span>
+      
       <div><div class="cat-name">Real Lab Lookup / Specimen ID</div><div class="cat-count" id="count-lookup"></div></div>
     </button>
     <button class="cat-btn" onclick="startCategory('why')">
-      <span class="cat-icon">❓</span>
+      
       <div><div class="cat-name">"Why" / Rationale</div><div class="cat-count" id="count-why"></div></div>
     </button>
     <button class="cat-btn" onclick="startCategory('seq')">
-      <span class="cat-icon">📋</span>
+      
       <div><div class="cat-name">Procedure / Sequence</div><div class="cat-count" id="count-seq"></div></div>
     </button>
     <button class="cat-btn" onclick="startCategory('error')">
-      <span class="cat-icon">🚨</span>
+      
       <div><div class="cat-name">Error / Troubleshooting</div><div class="cat-count" id="count-error"></div></div>
     </button>
     <button class="cat-btn" onclick="startCategory('obs')">
-      <span class="cat-icon">👁️</span>
+      
       <div><div class="cat-name">Observation Recording</div><div class="cat-count" id="count-obs"></div></div>
     </button>
   </div>
@@ -179,10 +298,10 @@ body { font-family:'Nunito',sans-serif; background:var(--bg);
       <div class="flip-back" id="flip-back"></div>
     </div>
   </div>
-  <button class="flip-btn" onclick="flipCard()">&#x1F504; Tap to flip card</button>
+  <button class="flip-btn" onclick="flipCard()">Tap to flip card</button>
   <div class="score-row" id="score-row" style="display:none;">
-    <button class="score-btn score-got" onclick="markCard(true)">&#10003; Got it</button>
-    <button class="score-btn score-missed" onclick="markCard(false)">&#10007; Study again</button>
+    <button class="score-btn score-got" onclick="markCard(true)">Got it</button>
+    <button class="score-btn score-missed" onclick="markCard(false)">Study again</button>
   </div>
   <div class="btn-row" style="margin-top:0.7rem;">
     <button class="nav-btn btn-prev" id="btn-prev" onclick="navigate(-1)" disabled>&#9664; Prev</button>
@@ -191,24 +310,36 @@ body { font-family:'Nunito',sans-serif; background:var(--bg);
   <div class="jump-row">
     Jump to: <input type="number" id="jump-inp" min="1" placeholder="No.">
     <button class="jump-go" onclick="jumpTo()">Go</button>
-    <span id="score-display" style="margin-left:auto;color:#34d399;font-size:0.8rem;font-weight:800;"></span>
+    <span id="score-display" style="margin-left:auto;color:var(--text);font-size:0.8rem;font-weight:800;"></span>
   </div>
   <div id="completion">
-    <div style="font-size:3rem;">&#x1F389;</div>
+    <div style="font-size:3rem;"></div>
     <h2>Set Complete!</h2>
     <p id="completion-msg" style="color:var(--muted);font-weight:700;"></p>
-    <button class="restart-btn" onclick="restartSet()">&#x1F501; Restart this set</button>
+    <button class="restart-btn" onclick="restartSet()">Restart this set</button>
     <button class="restart-btn restart-back" onclick="goBack()">&#8592; Choose category</button>
   </div>
 </div>
 
 <script>
+
+document.addEventListener("DOMContentLoaded", () => {
+  if (!localStorage.getItem("ospeGuideSeen")) {
+    document.getElementById("welcome-guide").style.display = "flex";
+  }
+});
+
+function dismissGuide() {
+  document.getElementById("welcome-guide").style.display = "none";
+  localStorage.setItem("ospeGuideSeen", "true");
+}
+
 const CARDS = [
 // ══════════════════════════════════════════════════════════════
-// 🎨 COLOUR DIFFERENCES
+//  COLOUR DIFFERENCES
 // ══════════════════════════════════════════════════════════════
-{cat:'colour',q:'What colour do chromosomes stain with Acetocarmine / Aceto-orcein in mitosis squash preps?',ans:'🔴 Deep Red / Crimson',points:['Acetocarmine = chromosomes stain deep red-purple','Binds to DNA/chromatin specifically','Background cytoplasm stays pale or unstained','Allows counting chromosomes and identifying stages']},
-{cat:'colour',q:'What colour does Lugol\'s iodine turn when starch is present?',ans:'🔵⚫ Deep Blue-Black',points:['Iodine + amylose complex = blue-black','Without starch: iodine stays orange-brown','Used to identify starch in potato, banana (amyloplasts)','Blue-black = positive result for starch']},
+{cat:'colour',q:'What colour do chromosomes stain with Acetocarmine / Aceto-orcein in mitosis squash preps?',ans:'Deep Red / Crimson',points:['Acetocarmine = chromosomes stain deep red-purple','Binds to DNA/chromatin specifically','Background cytoplasm stays pale or unstained','Allows counting chromosomes and identifying stages']},
+{cat:'colour',q:'What colour does Lugol\'s iodine turn when starch is present?',ans:'Deep Blue-Black',points:['Iodine + amylose complex = blue-black','Without starch: iodine stays orange-brown','Used to identify starch in potato, banana (amyloplasts)','Blue-black = positive result for starch']},
 {cat:'colour',q:'What colour change indicates a positive starch test (Lugol\'s iodine)?',ans:'Orange-brown → Blue-black',points:['Lugol\'s iodine alone = orange/amber','After adding to starch = blue-black','Iodine molecules enter amylose helix coil','Strong blue-black = lots of starch; faint = little']},
 {cat:'colour',q:'What does it mean when the Clorox solution turns GREEN during explant sterilization?',ans:'Chlorophyll is leaching out — this is NORMAL',points:['Green = chlorophyll dissolving into the NaOCl solution','Do NOT stop thinking it is contamination','Expected and acceptable during 15 min treatment','Do not extend time excessively']},
 {cat:'colour',q:'What colour change is observed at leaf margins after Clorox (NaOCl) treatment?',ans:'Margins become bleached / whitened',points:['NaOCl is a broad-spectrum oxidising agent','Oxidative damage bleaches chlorophyll at cut edges','Bleached borders MUST be excised before inoculation','Dead tissue = substrate for microbial growth']},
@@ -219,7 +350,7 @@ const CARDS = [
 {cat:'colour',q:'What colour does Janus Green B show inside active mitochondria vs the surrounding cytoplasm?',ans:'Inside active mitochondria = Blue-Green | Cytoplasm = Colorless',points:['Janus Green B is a supravital stain','Stays blue-green in mitochondria due to cytochrome c oxidase oxidation','Reduced to colorless form in the surrounding cytoplasm','Irreplaceable for identifying mitochondria by light microscopy']},
 
 // ══════════════════════════════════════════════════════════════
-// 🧮 CALCULATIONS
+//  CALCULATIONS
 // ══════════════════════════════════════════════════════════════
 {cat:'calc',q:'Calculate: How much Clorox stock (100%) to make 2% solution in 500 mL?',ans:'10 mL of stock → make up to 500 mL with distilled water',points:['Formula: C₁V₁ = C₂V₂','100 × V₁ = 2 × 500 → V₁ = 10 mL','Add 10 mL Clorox to 490 mL cold distilled water','Use cold water (warm releases toxic Cl₂ gas)']},
 {cat:'calc',q:'Calculate total magnification: 10x eyepiece + 40x objective lens.',ans:'400x total magnification',points:['Total mag = eyepiece × objective','10 × 40 = 400x','With 100x oil immersion: 10 × 100 = 1000x','With 4x: 10 × 4 = 40x (scanning power)']},
@@ -236,7 +367,7 @@ const CARDS = [
 {cat:'calc',q:'Estimated stage duration: A stage accounts for 15.3% of cells. If total cycle is 24 hours, how many hours does it take?',ans:'3.7 hours',points:['Duration = (percentage ÷ 100) × 24 hours','= 0.153 × 24 = 3.672 hours ≈ 3.7 hours','This is typical for prophase in onion root tip squash','Interphase (72.6%) = 17.4 hours']},
 
 // ══════════════════════════════════════════════════════════════
-// 🔭 MICROSCOPIC IDENTIFICATION
+//  MICROSCOPIC IDENTIFICATION
 // ══════════════════════════════════════════════════════════════
 {cat:'micro',q:'Identify this cell division slide view. What stage of mitosis is prominent?',img:'img/pract5_mitosis_microscope1.png',ans:'Allium cepa root tip squash (various mitotic stages)',points:['Stained with aceto-orcein (chromatin red-purple)','Meristematic zone cells are small, square, dense','Densely packed cells undergoing interphase or active division','Squashed to form a monolayer for counting']},
 {cat:'micro',q:'Identify the mitotic stage: Chromosomes condensed and visible but NOT yet aligned at the centre.',img:'img/pract5_mitosis_microscope2.png',ans:'PROPHASE',points:['First stage of mitosis','Chromatin condenses into visible chromosomes','Nuclear envelope begins to break down','Spindle fibres start to form at poles']},
@@ -256,7 +387,7 @@ const CARDS = [
 {cat:'micro',q:'Identify this microscopic view showing small green disc-like organelles isolated in a fraction.',img:'img/pract4_chloroplasts_microscope1.jpg',ans:'Isolated Bryophyllum chloroplast fraction (1,000 g pellet)',points:['Observed unstained under high-power light microscopy','Green disc-shaped structures, 5–6 µm in diameter','Isolated using differential centrifugation from Bryophyllum leaves','Structurally intact with envelope membranes conserved by sucrose buffer']},
 
 // ══════════════════════════════════════════════════════════════
-// 🧰 EQUIPMENT / GLASSWARE ID
+//  EQUIPMENT / GLASSWARE ID
 // ══════════════════════════════════════════════════════════════
 {cat:'equip',q:'This balance has a glass draft shield and digital readout showing 3.167 g. Name it and state its function.',img:'img/pract4_weighing_buds.png',ans:'Analytical Balance (e.g. Aczel CY513C)',points:['Measures mass to 0.001 g accuracy (3 decimal places)','Draft shield prevents air currents affecting reading','Tare (zero) before each measurement','Used for: agar, sugar, salts for MS medium preparation']},
 {cat:'equip',q:'Name this: Large metal pressure chamber using steam to sterilize media and tools.',ans:'Autoclave',points:['Conditions: 121°C, 15 psi, 15–20 minutes','Kills ALL microorganisms including heat-resistant spores','Uses moist heat = steam under pressure','Bottles: cap LOOSELY during autoclaving']},
@@ -269,7 +400,7 @@ const CARDS = [
 {cat:'equip',q:'Name and state the principle: Instrument that measures light absorbed by a sample at a specific wavelength.',ans:'Spectrophotometer / Colorimeter — based on Beer-Lambert Law',points:['A = εcl (Absorbance = molar absorptivity × concentration × path length)','Set to λmax (peak absorption wavelength) for accuracy','Zero with blank (solvent) first','Higher absorbance = higher concentration of solute']},
 
 // ══════════════════════════════════════════════════════════════
-// 📊 DIAGRAM LABELLING
+//  DIAGRAM LABELLING
 // ══════════════════════════════════════════════════════════════
 {cat:'diag',q:'On a compound microscope diagram, name the part that focuses light onto the specimen from below.',ans:'Condenser',points:['Located below the stage','Has iris diaphragm to control light amount','Close to specimen at higher magnification','Focuses light into cone onto the slide']},
 {cat:'diag',q:'On a microscope diagram, name the rotating disc that holds multiple objective lenses.',ans:'Revolving Nosepiece (Turret)',points:['Allows switching between objectives (4×, 10×, 40×, 100×)','Always start at lowest power (4×) then increase','Click into position when changing objectives','Do not touch objective glass surfaces']},
@@ -278,7 +409,7 @@ const CARDS = [
 {cat:'diag',q:'In MS medium preparation flow chart, what is the correct order of the final 3 steps?',ans:'Adjust pH → Add agar → Boil → Autoclave',points:['pH MUST be adjusted BEFORE agar is added','Agar changes pH equilibrium when it dissolves','After agar: boil to dissolve, dispense, then autoclave','Do NOT attempt to adjust pH after agar is set']},
 
 // ══════════════════════════════════════════════════════════════
-// 🧪 REAL LAB LOOKUP / SPECIMEN ID
+// REAL LAB LOOKUP / SPECIMEN ID
 // ══════════════════════════════════════════════════════════════
 {cat:'lookup',q:'Identify the process shown in this lab photo: adding a red dye to cut stem segments.',img:'img/pract3_staining_safranin.png',ans:'Safranin O staining of stem cross-sections',points:['Used to stain lignified secondary cell walls red','Intercalates into the phenylpropanoid polymer structure of lignin','Differentiates xylem and sclerenchyma from primary walls','Staining step done in watch glass before mounting']},
 {cat:'lookup',q:'Identify the tissue preparation shown: placing stem segments in foam blocks before slicing.',img:'img/pract3_petiole_sections.png',ans:'Pith/foam support sectioning technique',points:['A piece of polystyrene foam or pith is split in half','Stem is sandwiched inside the foam block','Helps support soft/thin stems during razor blade sectioning','Enables cutting thin cross-sections by hand']},
@@ -295,7 +426,7 @@ const CARDS = [
 {cat:'lookup',q:'You see a sealed culture bottle with white roots growing down into agar. What stage and medium?',ans:'Rooting stage — MS + high auxin (IBA + NAA)',points:['White roots = growing in low/no light conditions','Medium: MS + IBA 2 mg/L + NAA 1 mg/L (typical)','Well-rooted plantlets ready for hardening','May contain activated charcoal (turns medium dark)']},
 
 // ══════════════════════════════════════════════════════════════
-// ❓ "WHY" / RATIONALE
+//  "WHY" / RATIONALE
 // ══════════════════════════════════════════════════════════════
 {cat:'why',q:'Why is MS medium pH adjusted to 5.7–5.8 BEFORE adding agar?',ans:'Agar changes pH when it dissolves — impossible to re-adjust once solidified',points:['Agar dissolves and alters pH equilibrium','pH 5.7–5.8 = optimal for nutrient availability','Growth regulators work best in this pH range','Adjust with 1M NaOH (raise) or 1M HCl (lower)']},
 {cat:'why',q:'Why is 70% ethanol used instead of 100% ethanol for surface sterilization?',ans:'70% is optimum — water is needed for protein denaturation to occur effectively',points:['100% ethanol = precipitates surface proteins too fast → forms protective shell → cannot penetrate','70% = denatures AND disrupts lipid membranes effectively','<60% = insufficient dehydrating/denaturing power','70% is the internationally established optimum']},
@@ -319,7 +450,7 @@ const CARDS = [
 {cat:'why',q:'Why must potting substrate be steam-sterilized before hardening plantlets?',ans:'To kill soil-borne fungal pathogens (like Pythium, Phytophthora) that destroy delicate roots',points:['In vitro roots have no defensive barrier or symbiotic protection','Delicate root systems are highly vulnerable to soil microbes','Steam sterilization (30 min) kills vegetative cells and spores','Crucial for achieving high ex vitro survival rates']},
 
 // ══════════════════════════════════════════════════════════════
-// 📋 PROCEDURE / SEQUENCE
+//  PROCEDURE / SEQUENCE
 // ══════════════════════════════════════════════════════════════
 {cat:'seq',q:'Arrange the explant sterilization steps in correct order.',ans:'Tap water 30 min → Tween+Fungicide 20 min → DW wash ×3 → Clorox 15 min (×2) → DW wash → 70% ethanol 2 min → Sterile DW wash ×3',points:['Start with gross decontamination (tap water)','Fungicide (Captan) targets fungal spores','Clorox = primary chemical sterilant (2%)','70% ethanol is final chemical step before sterile rinse']},
 {cat:'seq',q:'What is the correct order of adding components when preparing 1 L of MS medium?',ans:'Water → Stock A → B → C → D → Growth regulators → Sugar → Adjust to 1L → Adjust pH → Add agar → Boil → Dispense → Autoclave',points:['Add stocks first while stirring','Dissolve sugar completely','Adjust pH BEFORE agar','Boil to dissolve agar → autoclave at 121°C, 15 psi']},
@@ -330,7 +461,7 @@ const CARDS = [
 {cat:'seq',q:'What is the correct way to place a leaf explant on agar during inoculation? Why?',ans:'Place abaxial (lower) surface facing down on the agar',points:['Stomata are concentrated on the abaxial side in dicots','Allows exchange of gases through the stomatal pores','Puts mesophyll cells in direct contact with nutrient agar','Improves uptake of growth regulators and sugar']},
 
 // ══════════════════════════════════════════════════════════════
-// 🚨 ERROR / TROUBLESHOOTING
+//  ERROR / TROUBLESHOOTING
 // ══════════════════════════════════════════════════════════════
 {cat:'error',q:'After inoculation, culture bottles show cloudy/coloured growth on agar after 1 week. What happened?',ans:'Microbial contamination — bacterial or fungal',points:['Possible causes: incomplete sterilization, poor LAF technique, contaminated tools','Pink/green/black growth = fungal contamination','Turbid medium = bacterial contamination','Action: discard all contaminated cultures; review aseptic technique']},
 {cat:'error',q:'After Clorox treatment, explant tissue is completely white/bleached throughout (not just margins). What went wrong?',ans:'Over-sterilization — Clorox too concentrated or exposure too long',points:['Standard: 2% Clorox for 15 minutes only','Prolonged treatment oxidises and kills all plant cells','Dead tissue will not establish in culture','Solution: reduce concentration, reduce time, or reduce temperature']},
@@ -341,7 +472,7 @@ const CARDS = [
 {cat:'error',q:'Your agar medium does not solidify properly after cooling. What went wrong during preparation?',ans:'The pH was adjusted too low (acidic <5.0) or agar was not boiled/dissolved completely',points:['Acidic pH hydrolyses agar polysaccharide chains when heated','Preventing the gel network from cross-linking upon cooling','Ensure pH is adjusted to 5.7–5.8 precisely','Always boil agar until solution is clear before dispensing']},
 
 // ══════════════════════════════════════════════════════════════
-// 👁️ OBSERVATION RECORDING
+//  OBSERVATION RECORDING
 // ══════════════════════════════════════════════════════════════
 {cat:'obs',q:'Record the observation table for explant sterilization stages (Stage → What you observe).',ans:'See key points below for each stage',points:['After Tween+Fungicide: surface cleaner; solution slightly turbid','After Clorox: leaf margins bleached/whitened','After ethanol: no visible colour change; tissue intact','After cutting: 1×1 cm healthy green central pieces','After inoculation: flat on agar; sealed with Parafilm']},
 {cat:'obs',q:'What is observed in wash water when removing agar from plantlet roots at 45°C?',ans:'Water becomes slightly cloudy/turbid — confirms agar has dissolved and dispersed',points:['Turbidity = agar polysaccharide chains dispersed in water','Roots become visible as agar layer releases','Roots appear pale white/cream after agar removal','Continue washing until water runs clear']},
@@ -365,16 +496,16 @@ function init(){
 }
 
 const META={
-  colour:{label:'🎨 Colour Differences',cls:'type-colour'},
-  calc:{label:'🧮 Calculations',cls:'type-calc'},
-  micro:{label:'🔭 Microscopic ID',cls:'type-micro'},
-  equip:{label:'🧰 Equipment ID',cls:'type-equip'},
-  diag:{label:'📊 Diagram Labelling',cls:'type-diag'},
-  lookup:{label:'🧪 Specimen ID',cls:'type-lookup'},
-  why:{label:'❓ Why / Rationale',cls:'type-why'},
-  seq:{label:'📋 Procedure',cls:'type-seq'},
-  error:{label:'🚨 Troubleshooting',cls:'type-error'},
-  obs:{label:'👁️ Observation',cls:'type-obs'},
+  colour:{label:' Colour Differences',cls:'type-colour'},
+  calc:{label:' Calculations',cls:'type-calc'},
+  micro:{label:' Microscopic ID',cls:'type-micro'},
+  equip:{label:' Equipment ID',cls:'type-equip'},
+  diag:{label:' Diagram Labelling',cls:'type-diag'},
+  lookup:{label:'Specimen ID',cls:'type-lookup'},
+  why:{label:' Why / Rationale',cls:'type-why'},
+  seq:{label:' Procedure',cls:'type-seq'},
+  error:{label:' Troubleshooting',cls:'type-error'},
+  obs:{label:' Observation',cls:'type-obs'},
 };
 
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
