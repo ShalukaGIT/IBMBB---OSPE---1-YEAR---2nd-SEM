@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🧪 OSPE Lab Flashcards</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --bg: #0f051d; --surface: #1f0c3a; --card-front: #2d1354; --card-back: #0b1e3f;
+  --accent: #c084fc; --accent2: #818cf8; --text: #f3e8ff; --muted: #a78bca;
+}
+body { font-family:'Nunito',sans-serif; background:var(--bg);
+  background-image:radial-gradient(ellipse at 20% 20%,#4a1080 0%,transparent 50%),radial-gradient(ellipse at 80% 80%,#0c1f4a 0%,transparent 50%);
+  min-height:100vh; color:var(--text); display:flex; flex-direction:column; align-items:center; padding:1.5rem 1rem 3rem; }
+.header { text-align:center; margin-bottom:1.5rem; }
+.header h1 { font-size:2.2rem; font-weight:900;
+  background: linear-gradient(135deg,#c084fc,#818cf8,#34d399); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.header p { font-size:0.9rem; color:var(--muted); font-weight:600; margin-top:0.25rem; }
+#category-screen { width:100%; max-width:680px; }
+.cat-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:0.75rem; }
+.cat-btn { background:var(--surface); border:2px solid transparent; border-radius:18px; padding:1.1rem 0.9rem;
+  cursor:pointer; transition:all 0.22s cubic-bezier(.34,1.56,.64,1); text-align:left; display:flex; align-items:flex-start; gap:0.6rem;
+  box-shadow:0 4px 20px rgba(0,0,0,0.3); font-family:'Nunito',sans-serif; }
+.cat-btn:hover { transform:translateY(-3px) scale(1.02); box-shadow:0 8px 30px rgba(192,132,252,0.3); }
+.cat-btn:active { transform:scale(0.97); }
+.cat-icon { font-size:1.6rem; flex-shrink:0; }
+.cat-name { font-size:0.9rem; font-weight:800; color:var(--text); line-height:1.2; margin-bottom:0.15rem; }
+.cat-count { font-size:0.75rem; font-weight:700; color:var(--muted); }
+.cat-btn.all-btn { grid-column:1/-1; justify-content:center; flex-direction:column; align-items:center;
+  background:linear-gradient(135deg,#4a1080,#1a2a6e); border-color:#c084fc44; padding:1.1rem; }
+.cat-btn.all-btn .cat-name { font-size:1.1rem; text-align:center; }
+.cat-btn.all-btn:hover { border-color:#c084fc; }
+#flashcard-screen { display:none; width:100%; max-width:560px; }
+.top-bar { width:100%; display:flex; align-items:center; gap:0.8rem; margin-bottom:1rem; }
+.back-btn { background:var(--surface); border:none; border-radius:50px; padding:0.5rem 1.1rem;
+  font-family:'Nunito',sans-serif; font-size:0.85rem; font-weight:800; color:var(--accent); cursor:pointer; transition:all 0.18s; white-space:nowrap; }
+.back-btn:hover { background:#3d1a6e; }
+.counter-badge { background:var(--surface); border-radius:50px; padding:0.4rem 1rem; font-size:0.9rem; font-weight:800; color:var(--accent); white-space:nowrap; }
+.prog-wrap { flex:1; background:rgba(255,255,255,0.08); border-radius:50px; height:8px; overflow:hidden; }
+.prog-fill { height:100%; background:linear-gradient(90deg,#c084fc,#818cf8); border-radius:50px; transition:width 0.4s ease; }
+.cat-label { font-size:0.72rem; font-weight:900; text-transform:uppercase; letter-spacing:1.5px; margin-bottom:0.6rem;
+  padding:0.3rem 0.9rem; border-radius:50px; display:inline-block; }
+.flip-container { width:100%; perspective:1200px; cursor:pointer; margin-bottom:1rem; }
+.flip-inner { position:relative; width:100%; min-height:380px; transition:transform 0.6s cubic-bezier(0.4,0,0.2,1); transform-style:preserve-3d; }
+.flip-container.flipped .flip-inner { transform:rotateY(180deg); }
+.flip-front,.flip-back { position:absolute; width:100%; height:100%; min-height:380px; border-radius:24px; padding:1.5rem;
+  backface-visibility:hidden; -webkit-backface-visibility:hidden; display:flex; flex-direction:column; box-shadow:0 12px 40px rgba(0,0,0,0.4); }
+.flip-front { background:var(--card-front); border:1px solid rgba(192,132,252,0.2); align-items:center; justify-content:center; text-align:center; gap:0.8rem; }
+.flip-back { background:var(--card-back); border:1px solid rgba(96,165,250,0.2); transform:rotateY(180deg); justify-content:flex-start; gap:0.5rem; overflow-y:auto; }
+.q-type-badge { font-size:0.7rem; font-weight:900; text-transform:uppercase; letter-spacing:1.5px; padding:0.3rem 1rem; border-radius:50px; }
+.card-img { max-width:100%; max-height:220px; border-radius:14px; object-fit:contain; box-shadow:0 6px 20px rgba(0,0,0,0.4); background:rgba(0,0,0,0.2); padding:4px; }
+.question-text { font-size:1.15rem; font-weight:800; color:var(--text); line-height:1.45; }
+.flip-hint { font-size:0.72rem; font-weight:700; color:rgba(255,255,255,0.35); margin-top:auto; }
+.ans-label { font-size:0.68rem; font-weight:900; text-transform:uppercase; letter-spacing:1.5px; color:var(--accent2); }
+.answer-main { font-size:1.05rem; font-weight:800; color:#a7f3d0; line-height:1.45; margin-bottom:0.3rem;
+  background:rgba(52,211,153,0.15); border:1px solid rgba(52,211,153,0.3); border-radius:12px; padding:0.6rem 0.9rem; }
+.answer-points { list-style:none; display:flex; flex-direction:column; gap:0.35rem; }
+.answer-points li { display:flex; align-items:flex-start; gap:0.5rem; font-size:0.88rem; font-weight:700; color:#d8b4fe; line-height:1.35; }
+.answer-points li::before { content:'▸'; color:var(--accent); flex-shrink:0; margin-top:0.05rem; }
+.back-img { max-width:100%; max-height:180px; border-radius:12px; object-fit:contain; margin:0.3rem 0; background:rgba(0,0,0,0.2); padding:4px; }
+.btn-row { display:flex; gap:0.8rem; width:100%; margin-bottom:0.8rem; }
+.nav-btn { flex:1; border:none; border-radius:50px; padding:0.9rem; font-family:'Nunito',sans-serif; font-size:1.05rem; font-weight:900;
+  cursor:pointer; transition:all 0.18s; box-shadow:0 5px 18px rgba(0,0,0,0.3); }
+.nav-btn:active { transform:scale(0.96); }
+.nav-btn:disabled { opacity:0.3; cursor:default; }
+.btn-prev { background:linear-gradient(135deg,#7c3aed,#5b21b6); color:#fff; }
+.btn-next { background:linear-gradient(135deg,#2563eb,#1d4ed8); color:#fff; }
+.btn-prev:hover:not(:disabled) { background:linear-gradient(135deg,#6d28d9,#4c1d95); }
+.btn-next:hover:not(:disabled) { background:linear-gradient(135deg,#1d4ed8,#1e3a8a); }
+.flip-btn { width:100%; border:2px solid rgba(192,132,252,0.4); border-radius:50px; padding:0.7rem;
+  background:rgba(192,132,252,0.1); font-family:'Nunito',sans-serif; font-size:0.9rem; font-weight:800; color:var(--accent); cursor:pointer; transition:all 0.18s; margin-bottom:0.8rem; }
+.flip-btn:hover { background:rgba(192,132,252,0.2); }
+.jump-row { display:flex; align-items:center; gap:0.5rem; font-size:0.82rem; font-weight:800; color:var(--muted); }
+.jump-row input { width:56px; border-radius:50px; border:2px solid rgba(192,132,252,0.4); padding:0.3rem 0.5rem;
+  font-family:'Nunito',sans-serif; font-size:0.85rem; font-weight:800; text-align:center; background:var(--surface); color:var(--text); outline:none; }
+.jump-go { background:var(--accent); color:#1a0533; border:none; border-radius:50px; padding:0.3rem 0.9rem;
+  font-family:'Nunito',sans-serif; font-size:0.82rem; font-weight:900; cursor:pointer; }
+.score-row { display:flex; gap:0.5rem; width:100%; margin-top:0.5rem; }
+.score-btn { flex:1; border:none; border-radius:50px; padding:0.55rem; font-family:'Nunito',sans-serif; font-size:0.82rem; font-weight:900; cursor:pointer; transition:all 0.18s; }
+.score-got { background:rgba(52,211,153,0.2); border:2px solid #34d399; color:#34d399; }
+.score-got:hover { background:rgba(52,211,153,0.35); }
+.score-missed { background:rgba(248,113,113,0.2); border:2px solid #f87171; color:#f87171; }
+.score-missed:hover { background:rgba(248,113,113,0.35); }
+#completion { display:none; flex-direction:column; align-items:center; text-align:center; gap:1rem; padding:2rem;
+  background:var(--surface); border-radius:24px; width:100%; box-shadow:0 12px 40px rgba(0,0,0,0.4); margin-top:1rem; }
+#completion h2 { font-size:1.8rem; font-weight:900; color:#fbbf24; }
+.restart-btn { background:linear-gradient(135deg,#c084fc,#818cf8); color:#1a0533; border:none; border-radius:50px;
+  padding:0.9rem 2rem; font-family:'Nunito',sans-serif; font-size:1rem; font-weight:900; cursor:pointer; transition:all 0.18s; }
+.restart-btn:hover { transform:scale(1.04); }
+.restart-back { background:var(--surface); color:var(--accent); border:2px solid var(--accent); }
+@keyframes popIn { 0%{transform:scale(0.85);opacity:0;} 100%{transform:scale(1);opacity:1;} }
+@keyframes slideRight { from{opacity:0;transform:translateX(60px);} to{opacity:1;transform:translateX(0);} }
+@keyframes slideLeft { from{opacity:0;transform:translateX(-60px);} to{opacity:1;transform:translateX(0);} }
+.anim-pop { animation:popIn 0.35s cubic-bezier(.34,1.56,.64,1) both; }
+.anim-right { animation:slideRight 0.3s ease both; }
+.anim-left { animation:slideLeft 0.3s ease both; }
+.type-calc { background:rgba(251,191,36,0.2); color:#fbbf24; border:1px solid rgba(251,191,36,0.4); }
+.type-colour { background:rgba(244,114,182,0.2); color:#f472b6; border:1px solid rgba(244,114,182,0.4); }
+.type-micro { background:rgba(52,211,153,0.2); color:#34d399; border:1px solid rgba(52,211,153,0.4); }
+.type-equip { background:rgba(96,165,250,0.2); color:#60a5fa; border:1px solid rgba(96,165,250,0.4); }
+.type-diag { background:rgba(251,146,60,0.2); color:#fb923c; border:1px solid rgba(251,146,60,0.4); }
+.type-lookup { background:rgba(163,230,53,0.2); color:#a3e635; border:1px solid rgba(163,230,53,0.4); }
+.type-why { background:rgba(192,132,252,0.2); color:#c084fc; border:1px solid rgba(192,132,252,0.4); }
+.type-seq { background:rgba(129,140,248,0.2); color:#818cf8; border:1px solid rgba(129,140,248,0.4); }
+.type-error { background:rgba(248,113,113,0.2); color:#f87171; border:1px solid rgba(248,113,113,0.4); }
+.type-obs { background:rgba(45,212,191,0.2); color:#2dd4bf; border:1px solid rgba(45,212,191,0.4); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🧪 OSPE Lab Flashcards</h1>
+  <p>Lab Exam Prep &middot; MBB1001 &middot; Select a question type to begin</p>
+</div>
+
+<!-- CATEGORY SCREEN -->
+<div id="category-screen">
+  <div class="cat-grid">
+    <button class="cat-btn all-btn" onclick="startCategory('all')">
+      <span class="cat-icon">⚡</span>
+      <div><div class="cat-name">All Categories — Mixed Shuffle</div><div class="cat-count" id="count-all"></div></div>
+    </button>
+    <button class="cat-btn" onclick="startCategory('colour')">
+      <span class="cat-icon">🎨</span>
+      <div><div class="cat-name">Colour Differences</div><div class="cat-count" id="count-colour"></div></div>
+    </button>
+    <button class="cat-btn" onclick="startCategory('calc')">
+      <span class="cat-icon">🧮</span>
+      <div><div class="cat-name">Calculations</div><div class="cat-count" id="count-calc"></div></div>
+    </button>
+    <button class="cat-btn" onclick="startCategory('micro')">
+      <span class="cat-icon">🔭</span>
+      <div><div class="cat-name">Microscopic ID</div><div class="cat-count" id="count-micro"></div></div>
+    </button>
+    <button class="cat-btn" onclick="startCategory('equip')">
+      <span class="cat-icon">🧰</span>
+      <div><div class="cat-name">Equipment / Glassware ID</div><div class="cat-count" id="count-equip"></div></div>
+    </button>
+    <button class="cat-btn" onclick="startCategory('diag')">
+      <span class="cat-icon">📊</span>
+      <div><div class="cat-name">Diagram Labelling</div><div class="cat-count" id="count-diag"></div></div>
+    </button>
+    <button class="cat-btn" onclick="startCategory('lookup')">
+      <span class="cat-icon">🧪</span>
+      <div><div class="cat-name">Real Lab Lookup / Specimen ID</div><div class="cat-count" id="count-lookup"></div></div>
+    </button>
+    <button class="cat-btn" onclick="startCategory('why')">
+      <span class="cat-icon">❓</span>
+      <div><div class="cat-name">"Why" / Rationale</div><div class="cat-count" id="count-why"></div></div>
+    </button>
+    <button class="cat-btn" onclick="startCategory('seq')">
+      <span class="cat-icon">📋</span>
+      <div><div class="cat-name">Procedure / Sequence</div><div class="cat-count" id="count-seq"></div></div>
+    </button>
+    <button class="cat-btn" onclick="startCategory('error')">
+      <span class="cat-icon">🚨</span>
+      <div><div class="cat-name">Error / Troubleshooting</div><div class="cat-count" id="count-error"></div></div>
+    </button>
+    <button class="cat-btn" onclick="startCategory('obs')">
+      <span class="cat-icon">👁️</span>
+      <div><div class="cat-name">Observation Recording</div><div class="cat-count" id="count-obs"></div></div>
+    </button>
+  </div>
+</div>
+
+<!-- FLASHCARD SCREEN -->
+<div id="flashcard-screen">
+  <div class="top-bar">
+    <button class="back-btn" onclick="goBack()">&#8592; Back</button>
+    <div class="counter-badge" id="counter-badge">1/10</div>
+    <div class="prog-wrap"><div class="prog-fill" id="prog-fill" style="width:10%"></div></div>
+  </div>
+  <div id="cat-label-display" class="cat-label"></div>
+  <div class="flip-container" id="flip-container" onclick="flipCard()">
+    <div class="flip-inner" id="flip-inner">
+      <div class="flip-front" id="flip-front"></div>
+      <div class="flip-back" id="flip-back"></div>
+    </div>
+  </div>
+  <button class="flip-btn" onclick="flipCard()">&#x1F504; Tap to flip card</button>
+  <div class="score-row" id="score-row" style="display:none;">
+    <button class="score-btn score-got" onclick="markCard(true)">&#10003; Got it</button>
+    <button class="score-btn score-missed" onclick="markCard(false)">&#10007; Study again</button>
+  </div>
+  <div class="btn-row" style="margin-top:0.7rem;">
+    <button class="nav-btn btn-prev" id="btn-prev" onclick="navigate(-1)" disabled>&#9664; Prev</button>
+    <button class="nav-btn btn-next" id="btn-next" onclick="navigate(1)">Next &#9654;</button>
+  </div>
+  <div class="jump-row">
+    Jump to: <input type="number" id="jump-inp" min="1" placeholder="No.">
+    <button class="jump-go" onclick="jumpTo()">Go</button>
+    <span id="score-display" style="margin-left:auto;color:#34d399;font-size:0.8rem;font-weight:800;"></span>
+  </div>
+  <div id="completion">
+    <div style="font-size:3rem;">&#x1F389;</div>
+    <h2>Set Complete!</h2>
+    <p id="completion-msg" style="color:var(--muted);font-weight:700;"></p>
+    <button class="restart-btn" onclick="restartSet()">&#x1F501; Restart this set</button>
+    <button class="restart-btn restart-back" onclick="goBack()">&#8592; Choose category</button>
+  </div>
+</div>
+
+<script>
+const CARDS = [
+// ══════════════════════════════════════════════════════════════
+// 🎨 COLOUR DIFFERENCES
+// ══════════════════════════════════════════════════════════════
+{cat:'colour',q:'What colour do chromosomes stain with Acetocarmine / Aceto-orcein in mitosis squash preps?',ans:'🔴 Deep Red / Crimson',points:['Acetocarmine = chromosomes stain deep red-purple','Binds to DNA/chromatin specifically','Background cytoplasm stays pale or unstained','Allows counting chromosomes and identifying stages']},
+{cat:'colour',q:'What colour does Lugol\'s iodine turn when starch is present?',ans:'🔵⚫ Deep Blue-Black',points:['Iodine + amylose complex = blue-black','Without starch: iodine stays orange-brown','Used to identify starch in potato, banana (amyloplasts)','Blue-black = positive result for starch']},
+{cat:'colour',q:'What colour change indicates a positive starch test (Lugol\'s iodine)?',ans:'Orange-brown → Blue-black',points:['Lugol\'s iodine alone = orange/amber','After adding to starch = blue-black','Iodine molecules enter amylose helix coil','Strong blue-black = lots of starch; faint = little']},
+{cat:'colour',q:'What does it mean when the Clorox solution turns GREEN during explant sterilization?',ans:'Chlorophyll is leaching out — this is NORMAL',points:['Green = chlorophyll dissolving into the NaOCl solution','Do NOT stop thinking it is contamination','Expected and acceptable during 15 min treatment','Do not extend time excessively']},
+{cat:'colour',q:'What colour change is observed at leaf margins after Clorox (NaOCl) treatment?',ans:'Margins become bleached / whitened',points:['NaOCl is a broad-spectrum oxidising agent','Oxidative damage bleaches chlorophyll at cut edges','Bleached borders MUST be excised before inoculation','Dead tissue = substrate for microbial growth']},
+{cat:'colour',q:'What colour is callus? How does it differ from healthy shoot tissue?',ans:'Callus = pale/cream/white, often friable. Shoots = green',points:['Callus = undifferentiated; no chlorophyll','Green shoots = chlorophyll; differentiated tissue','Browning callus = stress or phenolic oxidation','Healthy callus = creamy/white and firm']},
+{cat:'colour',q:'What colour/appearance does the wash water show when removing agar from plantlet roots at 45°C?',ans:'Slightly cloudy / turbid (milky-white)',points:['Agar dissolves and disperses into warm water','Turbidity confirms agar is being removed','Roots become visible and clean after washing','Clear water at end = agar fully removed']},
+{cat:'colour',q:'What is the colour of MS medium before vs after autoclaving?',ans:'Before: cloudy/opaque. After: clear/transparent gel when cool',points:['Agar dissolves and clarifies during boiling + autoclaving','Slight yellow/amber tinge is normal','Contaminated medium = turbid, coloured, or visible growth','Clear solid gel = ready to use']},
+{cat:'colour',q:'What colour do cells of plant tissue stain when exposed to Safranin O vs Methyl Green?',ans:'Lignified = Red/Orange-Red (Safranin) | Cellulosic = Blue/Blue-Green (Methyl Green)',points:['Safranin O binds to lignin (secondary wall in xylem, sclerenchyma)','Methyl Green binds to cellulose (primary wall in phloem, cortex, pith)','Dual staining shows tissue arrangement clearly','Provides differential staining profile']},
+{cat:'colour',q:'What colour does Janus Green B show inside active mitochondria vs the surrounding cytoplasm?',ans:'Inside active mitochondria = Blue-Green | Cytoplasm = Colorless',points:['Janus Green B is a supravital stain','Stays blue-green in mitochondria due to cytochrome c oxidase oxidation','Reduced to colorless form in the surrounding cytoplasm','Irreplaceable for identifying mitochondria by light microscopy']},
+
+// ══════════════════════════════════════════════════════════════
+// 🧮 CALCULATIONS
+// ══════════════════════════════════════════════════════════════
+{cat:'calc',q:'Calculate: How much Clorox stock (100%) to make 2% solution in 500 mL?',ans:'10 mL of stock → make up to 500 mL with distilled water',points:['Formula: C₁V₁ = C₂V₂','100 × V₁ = 2 × 500 → V₁ = 10 mL','Add 10 mL Clorox to 490 mL cold distilled water','Use cold water (warm releases toxic Cl₂ gas)']},
+{cat:'calc',q:'Calculate total magnification: 10x eyepiece + 40x objective lens.',ans:'400x total magnification',points:['Total mag = eyepiece × objective','10 × 40 = 400x','With 100x oil immersion: 10 × 100 = 1000x','With 4x: 10 × 4 = 40x (scanning power)']},
+{cat:'calc',q:'Rf value: compound travels 3.6 cm, solvent front travels 6.0 cm. Calculate Rf.',ans:'Rf = 0.60',points:['Rf = distance by spot ÷ distance by solvent front','= 3.6 ÷ 6.0 = 0.60','Rf always between 0 and 1','Same compound → same Rf in same solvent']},
+{cat:'calc',q:'Beer-Lambert: A = εcl. A = 0.45, ε = 5000 M⁻¹cm⁻¹, l = 1 cm. Find c.',ans:'c = 9 × 10⁻⁵ M (90 µM)',points:['Rearrange: c = A / (ε × l)','= 0.45 / (5000 × 1) = 9 × 10⁻⁵ M','Higher absorbance = higher concentration','Used in spectrophotometry experiments']},
+{cat:'calc',q:'pH = −log[H⁺]. If [H⁺] = 1 × 10⁻⁵ M, what is the pH?',ans:'pH = 5 (acidic)',points:['pH = −log(1 × 10⁻⁵) = 5','MS medium target: pH 5.7–5.8','Below 7 = acidic; above 7 = basic','Adjust with 1 M NaOH (up) or 1 M HCl (down)']},
+{cat:'calc',q:'How much each MS stock to add per 1 L of medium?',ans:'Stock A: 50 mL | Stock B: 5 mL | Stock C: 5 mL | Stock D: 25 mL',points:['A = macronutrients = 50 mL/L','B = micronutrients = 5 mL/L','C = vitamins = 5 mL/L','D = iron (FeSO₄ + EDTA) = 25 mL/L']},
+{cat:'calc',q:'C₁V₁ = C₂V₂: Need 100 mL of 70% ethanol from 95% stock. How much 95% stock?',ans:'~73.7 mL of 95% ethanol → make up to 100 mL',points:['95 × V₁ = 70 × 100','V₁ = 7000 / 95 = 73.7 mL','Add 73.7 mL 95% ethanol + 26.3 mL distilled water','= 100 mL of 70% ethanol']},
+{cat:'calc',q:'Calculate the micrometer calibration factor: 10 stage divisions (10 µm each) coincide with 40 eyepiece units (epu).',ans:'2.5 µm/epu',points:['Known length = 10 × 10 µm = 100 µm','Number of epu = 40','Calibration factor = 100 µm ÷ 40 epu = 2.5 µm/epu','This is typical for a 4× objective lens']},
+{cat:'calc',q:'Calculate the micrometer calibration factor: 10 stage divisions (10 µm each) coincide with 100 eyepiece units (epu).',ans:'1.0 µm/epu',points:['Known length = 10 × 10 µm = 100 µm','Number of epu = 100','Calibration factor = 100 µm ÷ 100 epu = 1.0 µm/epu','This is typical for a 10× objective lens']},
+{cat:'calc',q:'A cell measures 17 epu under a 10× objective lens calibrated at 1.0 µm/epu. What is its actual length?',ans:'17 µm',points:['Cell length = eyepiece units × calibration factor','= 17 epu × 1.0 µm/epu = 17 µm','Consensus value for Spirogyra cell length in Pract 1','Make sure to use correct factor for active objective']},
+{cat:'calc',q:'Calculate xylem flow rate: dye travelled 7 segments of 5 mm each. 2.5 mm correction added. Time elapsed = 90 s. Find rate.',ans:'0.417 mm/s (or 25 mm/min)',points:['Raw distance = 7 × 5 mm = 35 mm','Adjusted distance = 35 mm + 2.5 mm = 37.5 mm','Time = 90 s = 1.5 min','Rate = 37.5 mm / 90 s = 0.417 mm/s = 25 mm/min']},
+{cat:'calc',q:'Calculate Mitotic Index: 109 mitotic cells counted out of 398 total cells.',ans:'27.4%',points:['Mitotic Index = (mitotic cells ÷ total cells) × 100','= (109 ÷ 398) × 100 = 27.387% ≈ 27.4%','Mitotic cells includes: prophase, metaphase, anaphase, telophase','Interphase is excluded']},
+{cat:'calc',q:'Estimated stage duration: A stage accounts for 15.3% of cells. If total cycle is 24 hours, how many hours does it take?',ans:'3.7 hours',points:['Duration = (percentage ÷ 100) × 24 hours','= 0.153 × 24 = 3.672 hours ≈ 3.7 hours','This is typical for prophase in onion root tip squash','Interphase (72.6%) = 17.4 hours']},
+
+// ══════════════════════════════════════════════════════════════
+// 🔭 MICROSCOPIC IDENTIFICATION
+// ══════════════════════════════════════════════════════════════
+{cat:'micro',q:'Identify this cell division slide view. What stage of mitosis is prominent?',img:'img/pract5_mitosis_microscope1.png',ans:'Allium cepa root tip squash (various mitotic stages)',points:['Stained with aceto-orcein (chromatin red-purple)','Meristematic zone cells are small, square, dense','Densely packed cells undergoing interphase or active division','Squashed to form a monolayer for counting']},
+{cat:'micro',q:'Identify the mitotic stage: Chromosomes condensed and visible but NOT yet aligned at the centre.',img:'img/pract5_mitosis_microscope2.png',ans:'PROPHASE',points:['First stage of mitosis','Chromatin condenses into visible chromosomes','Nuclear envelope begins to break down','Spindle fibres start to form at poles']},
+{cat:'micro',q:'Identify the mitotic stage: All chromosomes lined up at the equatorial plate (cell\'s centre).',img:'img/pract5_mitosis_microscope2.png',ans:'METAPHASE',points:['Chromosomes maximally condensed — easiest to count','Aligned at metaphase plate (equator)','Spindle fibres attach to centromeres','Best stage for karyotyping']},
+{cat:'micro',q:'Identify the mitotic stage: Sister chromatids pulled apart toward opposite poles. Chromosomes look V or J shaped.',img:'img/pract5_mitosis_microscope2.png',ans:'ANAPHASE',points:['Chromatids separate — now called daughter chromosomes','Pulled toward poles by spindle fibres','Cell begins to elongate','V or J shape: centromere leads, arms trail']},
+{cat:'micro',q:'Identify: Two new nuclei reforming, cell plate appears between them.',img:'img/pract5_mitosis_microscope2.png',ans:'TELOPHASE + Cytokinesis',points:['Nuclear envelope reforms around each set','Chromosomes decondense','Cell plate = new cell wall forming in plant cells','Two genetically identical daughter cells produced']},
+{cat:'micro',q:'You see a nucleus visible but chromosomes not individually distinguished. Cell metabolically active. What stage?',img:'img/pract5_mitosis_microscope2.png',ans:'INTERPHASE',points:['DNA in chromatin form (not condensed)','Cell actively growing and replicating DNA','Has G1 (growth), S (DNA synthesis), G2 (prep) phases','Most cells spend most time here']},
+{cat:'micro',q:'Identify this unstained plant stem cross-section. Which species is it?',img:'img/pract3_cosmos_not_stained.jpg',ans:'Transverse section of Cosmos sp. stem (unstained)',points:['Clear ring of vascular bundles','Epidermis, cortex, and central pith visible','No dual stain applied, but natural cell outlines show','Low magnification view']},
+{cat:'micro',q:'Identify this dual-stained plant stem cross-section showing red/orange secondary walls and blue/green primary walls.',img:'img/pract3_hibiscus_stained.jpg',ans:'Transverse section of Hibiscus sp. stem (stained)',points:['Stained with Safranin O (red) and Methyl Green (blue-green)','Red stained cells = lignified xylem vessels, tracheids, sclerenchyma','Blue-green stained cells = cellulosic cortex, phloem, pith parenchyma','Discrete vascular bundles arranged in a ring']},
+{cat:'micro',q:'Identify this leaf epidermal cast. What structures are highlighted?',img:'img/pract3_stomata_high_power.jpg',ans:'Abaxial surface cast of Hibiscus sp. leaf showing stomata and guard cells',points:['Prepared using transparent nail polish peel method','Reniform (kidney-shaped) guard cells flanking each stomata pore','High density confirms abaxial (lower) surface','No stomata found on adaxial (upper) surface cast']},
+{cat:'micro',q:'Identify this cell structure: Red-stained regular, rectangular cells with no intercellular spaces.',img:'img/pract2_page_6.jpg',ans:'Allium cepa (onion) epidermis stained with Safranin O',points:['Rectangular cells arranged compactly','Safranin O stains the cell wall distinctly red','Forms a protective surface layer','Nucleus may be visible pressed against the wall']},
+{cat:'micro',q:'Identify this phenomenon: Cells with shrunken protoplasts and a clear space between the plasma membrane and cell wall.',img:'img/pract2_page_7.jpg',ans:'Plasmolysis in Rhoeo discolor epidermis',points:['Mounted in hypertonic 2 M sucrose solution','Water left the cell by osmosis','Purple anthocyanin pigment remains in the shrunken vacuole','Cell wall remains rigid while protoplast retracts']},
+{cat:'micro',q:'Identify these structures: Dark blue-black stained bodies within plant cells.',img:'img/pract2_page_8.jpg',ans:'Amyloplasts in potato/banana tissue stained with Lugol\'s iodine',points:['Unstained amyloplasts have limited contrast','Iodine complexes with starch to form blue-black colour','Confirms the presence of starch storage granules','Found in non-photosynthetic storage tissues']},
+{cat:'micro',q:'Identify this stem cross-section showing distinct red (lignified) and blue-green (cellulosic) regions.',img:'img/pract3_hibiscus_low_mag.jpg',ans:'Transverse section of Hibiscus sp. stem (low mag)',points:['Dual-stained with Safranin O and Methyl Green','Vascular bundles arranged in a distinct ring','Typical dicotyledon stem structure','Pith is central and cellulosic (blue-green)']},
+{cat:'micro',q:'Identify this microscopic view: Root tip cells spreading out after acid hydrolysis.',img:'img/pract5_mitosis_squash.png',ans:'Onion (Allium cepa) root tip squash preparation',points:['Treated with 1M HCl at 60°C to soften middle lamella','Cells separated into a monolayer for viewing','Chromosomes stained with Aceto-orcein','Allows visualization of mitotic stages in meristematic tissue']},
+{cat:'micro',q:'Identify this structure: Disc-shaped green organelles arranged in rows along the inner cell wall.',img:'img/microscope_pract4b.jpg',ans:'Chloroplasts in Vallisneria sp.',points:['Disc-shaped plastids containing chlorophyll','Site of photosynthesis','Arranged along the cell periphery','Cytoplasmic streaming may be visible']},
+{cat:'micro',q:'Identify this microscopic view showing small green disc-like organelles isolated in a fraction.',img:'img/pract4_chloroplasts_microscope1.jpg',ans:'Isolated Bryophyllum chloroplast fraction (1,000 g pellet)',points:['Observed unstained under high-power light microscopy','Green disc-shaped structures, 5–6 µm in diameter','Isolated using differential centrifugation from Bryophyllum leaves','Structurally intact with envelope membranes conserved by sucrose buffer']},
+
+// ══════════════════════════════════════════════════════════════
+// 🧰 EQUIPMENT / GLASSWARE ID
+// ══════════════════════════════════════════════════════════════
+{cat:'equip',q:'This balance has a glass draft shield and digital readout showing 3.167 g. Name it and state its function.',img:'img/pract4_weighing_buds.png',ans:'Analytical Balance (e.g. Aczel CY513C)',points:['Measures mass to 0.001 g accuracy (3 decimal places)','Draft shield prevents air currents affecting reading','Tare (zero) before each measurement','Used for: agar, sugar, salts for MS medium preparation']},
+{cat:'equip',q:'Name this: Large metal pressure chamber using steam to sterilize media and tools.',ans:'Autoclave',points:['Conditions: 121°C, 15 psi, 15–20 minutes','Kills ALL microorganisms including heat-resistant spores','Uses moist heat = steam under pressure','Bottles: cap LOOSELY during autoclaving']},
+{cat:'equip',q:'Name this: Cabinet with HEPA filter and UV lamp where all PTC inoculations are done.',ans:'Laminar Air Flow (LAF) Cabinet',points:['HEPA filter removes particles ≥0.3 µm','Positive-pressure filtered airflow prevents contamination','UV lamp pre-sterilizes: 35 min before work','All inoculations MUST be done inside LAF']},
+{cat:'equip',q:'Name this glassware: Small flat-bottomed dish with a lid, used to place explants during cutting.',ans:'Petri Dish',points:['Usually 90 mm diameter','Sterilized before use (autoclave or UV)','Used to cut explants on sterile surface','Flamed or UV-sterilized inside LAF before use']},
+{cat:'equip',q:'Name this item: Thin self-sealing plastic film wrapped around culture bottle lids after inoculation.',ans:'Parafilm',points:['Creates airtight / semi-gas-permeable seal','Prevents microbial ingress during incubation','Stretchable and self-adherent — no heat needed','Semi-permeable = allows some gas exchange']},
+{cat:'equip',q:'Name this: Probe dipped into solution to measure pH; must be stored in KCl solution when not in use.',ans:'pH Electrode / pH Meter probe',points:['Must be calibrated with pH 4, 7, 10 buffers before use','Rinse with distilled water between measurements','Store in KCl NOT distilled water (keeps membrane hydrated)','Glass membrane is fragile — do not scratch']},
+{cat:'equip',q:'Name this: Flat transparent container holding the liquid sample in a spectrophotometer.',ans:'Cuvette',points:['Must be transparent to the wavelength used','Glass = visible light; Quartz = UV light','Fill 2/3 full; wipe outside clean before measuring','Blank cuvette = solvent only; zeros the instrument']},
+{cat:'equip',q:'Name this tool: Thin wire loop on a metal handle; must be flamed red-hot before every microbiology use.',ans:'Inoculation Loop',points:['Flame in Bunsen burner until red-hot (incineration)','Allow to cool 10–15 sec before touching culture','Cool on edge of petri dish if unsure','Kills all microbes by incineration — most reliable sterilization']},
+{cat:'equip',q:'Name and state the principle: Instrument that measures light absorbed by a sample at a specific wavelength.',ans:'Spectrophotometer / Colorimeter — based on Beer-Lambert Law',points:['A = εcl (Absorbance = molar absorptivity × concentration × path length)','Set to λmax (peak absorption wavelength) for accuracy','Zero with blank (solvent) first','Higher absorbance = higher concentration of solute']},
+
+// ══════════════════════════════════════════════════════════════
+// 📊 DIAGRAM LABELLING
+// ══════════════════════════════════════════════════════════════
+{cat:'diag',q:'On a compound microscope diagram, name the part that focuses light onto the specimen from below.',ans:'Condenser',points:['Located below the stage','Has iris diaphragm to control light amount','Close to specimen at higher magnification','Focuses light into cone onto the slide']},
+{cat:'diag',q:'On a microscope diagram, name the rotating disc that holds multiple objective lenses.',ans:'Revolving Nosepiece (Turret)',points:['Allows switching between objectives (4×, 10×, 40×, 100×)','Always start at lowest power (4×) then increase','Click into position when changing objectives','Do not touch objective glass surfaces']},
+{cat:'diag',q:'Label the 3 key parts of a LAF cabinet: filtration unit, work surface, front sliding panel.',ans:'HEPA filter (top/back) | Sterile work bench | Sash / front glass panel',points:['HEPA = High Efficiency Particulate Air filter','UV lamp at top; bunsen in work zone','Sash height affects airflow — do not fully close during work','Work towards you — never reach over open vessels']},
+{cat:'diag',q:'In a TLC diagram: spot at 3.6 cm, solvent front at 6.0 cm. Show and label the Rf calculation.',ans:'Rf = 3.6 ÷ 6.0 = 0.60',points:['Draw baseline (origin) where spots were applied','Measure baseline → centre of spot = 3.6 cm','Measure baseline → solvent front = 6.0 cm','Rf = spot distance / front distance = 0.60']},
+{cat:'diag',q:'In MS medium preparation flow chart, what is the correct order of the final 3 steps?',ans:'Adjust pH → Add agar → Boil → Autoclave',points:['pH MUST be adjusted BEFORE agar is added','Agar changes pH equilibrium when it dissolves','After agar: boil to dissolve, dispense, then autoclave','Do NOT attempt to adjust pH after agar is set']},
+
+// ══════════════════════════════════════════════════════════════
+// 🧪 REAL LAB LOOKUP / SPECIMEN ID
+// ══════════════════════════════════════════════════════════════
+{cat:'lookup',q:'Identify the process shown in this lab photo: adding a red dye to cut stem segments.',img:'img/pract3_staining_safranin.png',ans:'Safranin O staining of stem cross-sections',points:['Used to stain lignified secondary cell walls red','Intercalates into the phenylpropanoid polymer structure of lignin','Differentiates xylem and sclerenchyma from primary walls','Staining step done in watch glass before mounting']},
+{cat:'lookup',q:'Identify the tissue preparation shown: placing stem segments in foam blocks before slicing.',img:'img/pract3_petiole_sections.png',ans:'Pith/foam support sectioning technique',points:['A piece of polystyrene foam or pith is split in half','Stem is sandwiched inside the foam block','Helps support soft/thin stems during razor blade sectioning','Enables cutting thin cross-sections by hand']},
+{cat:'lookup',q:'Identify the process shown: leaf tissues shredding in a cold mortar.',img:'img/pract4_shredding_leaves.png',ans:'Homogenisation step of chloroplast isolation',points:['Bryophyllum leaves are shredded into cold mortar','Ice-cold sucrose extraction buffer (0.34 M) is added','Acid-washed sand added to help grind tough cells','Grind for 2 minutes to break open cell walls mechanically']},
+{cat:'lookup',q:'Identify this setup: tubes in a rotor inside a chilling chamber.',img:'img/pract4_centrifugation.png',ans:'Differential Centrifugation (chilled benchtop centrifuge)',points:['Chilling prevents heat-induced organelle membrane denaturation','Used to separate cell components by size and density','Spin 1: 200 g for 5 min (pellets nuclei, debris)','Spin 2: 1,000 g for 5 min (pellets chloroplasts)']},
+{cat:'lookup',q:'You are shown a jar with a pale cream/white, irregular, friable mass on agar. What is this?',ans:'Callus — undifferentiated plant tissue mass',points:['Pale/cream = no chlorophyll development','Friable (crumbles easily) = key feature','Growing on callus induction medium (high auxin ratio)','Can be subcultured or induced to form shoots/roots']},
+{cat:'lookup',q:'Identify this lab procedure: Gel with purple/blue bands.',img:'img/electrophoresis_gel.png',ans:'Agarose Gel Electrophoresis',points:['Used to separate DNA fragments by size','DNA moves towards the positive electrode (anode)','Smaller fragments travel faster and further','Stained with a DNA-binding dye for visualization']},
+{cat:'lookup',q:'Identify this equipment setup: Buffer tank, gel tray, and power supply.',img:'img/electrophoresis_setup.png',ans:'Gel Electrophoresis Apparatus',points:['Buffer conducts electric current across the gel','Samples are loaded into wells at the negative end','Constant voltage applied for a set time','Used in molecular biology for DNA/RNA analysis']},
+{cat:'lookup',q:'Identify this technique: Preparing a temporary mount using a viscous liquid.',img:'img/pract3_mounting_glycerol.png',ans:'Mounting in Glycerol (or Glycerine)',points:['Prevents the specimen from drying out','Has a refractive index close to glass, improving image quality','Used for semi-permanent slides','Cover slip must be lowered gently to avoid air bubbles']},
+{cat:'lookup',q:'Identify this procedure: Applying green dye to plant tissue sections.',img:'img/pract3_staining_methyl_green.png',ans:'Staining with Methyl Green',points:['Stains cellulosic primary cell walls blue-green','Counterstain often used after Safranin O','Differentiates phloem and parenchyma from xylem','Improves contrast in brightfield microscopy']},
+{cat:'lookup',q:'Identify this step: Using nail polish on a leaf surface.',img:'img/pract3_stomata_cast_prep.png',ans:'Stomatal Cast Preparation',points:['Clear nail polish applied to abaxial leaf surface','Allowed to dry, then peeled off with tape','Creates a replica of the leaf epidermis and stomata','Avoids the need to section the leaf for stomatal counts']},
+{cat:'lookup',q:'You see a culture bottle with solid agar and small green shoots growing upward. What stage is this?',ans:'Shoot Induction / Shoot Multiplication stage',points:['Green = chlorophyll in differentiated shoot tissue','Medium: high BAP (cytokinin) : low auxin ratio','Organogenesis has occurred from callus or explant','Next: separate and transfer to rooting medium']},
+{cat:'lookup',q:'You are shown a potted plant under 50% shade netting. What stage of micropropagation is this?',ans:'Secondary Hardening stage',points:['50% shade = secondary hardening (net house)','After 3–4 weeks, transfer to full sunlight (open field)','Primary hardening = 75% shade in greenhouse (first stage)','Purpose: progressively reduce humidity, increase light']},
+{cat:'lookup',q:'You see a sealed culture bottle with white roots growing down into agar. What stage and medium?',ans:'Rooting stage — MS + high auxin (IBA + NAA)',points:['White roots = growing in low/no light conditions','Medium: MS + IBA 2 mg/L + NAA 1 mg/L (typical)','Well-rooted plantlets ready for hardening','May contain activated charcoal (turns medium dark)']},
+
+// ══════════════════════════════════════════════════════════════
+// ❓ "WHY" / RATIONALE
+// ══════════════════════════════════════════════════════════════
+{cat:'why',q:'Why is MS medium pH adjusted to 5.7–5.8 BEFORE adding agar?',ans:'Agar changes pH when it dissolves — impossible to re-adjust once solidified',points:['Agar dissolves and alters pH equilibrium','pH 5.7–5.8 = optimal for nutrient availability','Growth regulators work best in this pH range','Adjust with 1M NaOH (raise) or 1M HCl (lower)']},
+{cat:'why',q:'Why is 70% ethanol used instead of 100% ethanol for surface sterilization?',ans:'70% is optimum — water is needed for protein denaturation to occur effectively',points:['100% ethanol = precipitates surface proteins too fast → forms protective shell → cannot penetrate','70% = denatures AND disrupts lipid membranes effectively','<60% = insufficient dehydrating/denaturing power','70% is the internationally established optimum']},
+{cat:'why',q:'Why pre-sterilize the LAF cabinet for 35 minutes with UV lamp before starting work?',ans:'UV at 254 nm takes 35 min to sufficiently damage microbial DNA on surfaces',points:['UV induces thymine dimer formation in microbial DNA','Prevents DNA replication → kills surface microbes','35 min = sufficient exposure time for effective kill','After UV: wipe with 70% ethanol then begin work']},
+{cat:'why',q:'Why is agar removed from plantlet roots using 45°C water specifically?',ans:'At 45°C, dilute agar (6–8 g/L) softens and releases from roots without causing thermal damage',points:['Agar gels at 32–40°C; 45°C is sufficient to loosen it','Cold water = agar stays solid on roots','Boiling (>85°C) = damages delicate fragile root system','Residual agar = fungal/bacterial nutrient → root rot in soil']},
+{cat:'why',q:'Why must culture bottles be capped LOOSELY during autoclaving?',ans:'Steam needs to penetrate; a tight cap causes pressure buildup and risk of explosion',points:['Steam exchanges needed for complete sterilization inside','Tight cap → internal pressure → bottle could shatter','After autoclave: bottles tightened aseptically in LAF','Loose cap allows steam to circulate during sterilization']},
+{cat:'why',q:'Why is sucrose (30 g/L) added to MS plant tissue culture medium?',ans:'In vitro plants are heterotrophic — they cannot photosynthesize efficiently and need an external carbon source',points:['Sealed bottles + low light = poor photosynthesis','Sucrose = primary carbon and energy source','Hydrolysed to glucose + fructose by sucrase','Without sugar: plants cannot grow in culture']},
+{cat:'why',q:'Why must callus NOT be subcultured more than ~7 times?',ans:'Excessive subculturing causes somaclonal variation — genetic instability accumulates',points:['Repeated rapid division → DNA replication errors accumulate','Chromosomal abnormalities develop over passages','Regenerated plants may not be true-to-type (genetically identical)','~7 passages = generally accepted safe limit']},
+{cat:'why',q:'Why placed under 75% shade in primary hardening?',ans:'In vitro leaves have no light-protective pigments — full sunlight causes photo-oxidative damage',points:['Excess photons → reactive oxygen species (ROS)','ROS overwhelm limited antioxidant capacity of in vitro tissue','Chlorophyll bleaching and necrosis result','Gradual exposure allows protective mechanisms to develop']},
+{cat:'why',q:'Why must inoculation tools (forceps, scalpel) cool before touching the explant?',ans:'Hot metal causes thermal burning and tissue death at the contact point',points:['Flame heats metal to very high temperatures','Hot metal on tissue = protein denaturation, cell death','Cool 10–15 sec after flaming','Test on the petri dish edge before touching explant']},
+{cat:'why',q:'Why is Tween-20 added during the fungicide wash step?',ans:'Tween-20 is a non-ionic surfactant — reduces surface tension so sterilants penetrate the waxy leaf cuticle',points:['Waxy cuticle is hydrophobic — repels water-based sterilants','Surfactant lowers surface tension → solution spreads and penetrates','Also dislodges adhering microorganisms mechanically','Non-ionic = does not damage plant tissue']},
+{cat:'why',q:'Why do we use Carnoy\'s fluid (3:1 ethanol to glacial acetic acid) in onion root tip squash preparations?',ans:'It acts as a fixative to freeze chromosomes in their current mitotic configurations',points:['Fixative preserves nuclear structure','Stops cell division instantly','Ethanol dehydrates while acetic acid penetrates rapidly','Maintains chromosome integrity during subsequent acid heating']},
+{cat:'why',q:'Why is the onion root tip heated in 1 M HCl at 60°C for 5 minutes during squash preparation?',ans:'HCl hydrolyses and softens the middle lamella by dissolving pectins, separating the cells',points:['Dissolves the pectin holding plant cell walls together','Makes it easy to squash the tissue into a flat single layer','Softer cells spread out without rupturing the nucleus','Also called acid maceration']},
+{cat:'why',q:'Why is sucrose added to the cell homogenisation/extraction buffer in Practical 4?',ans:'It acts as an osmotic stabilizer to prevent osmotic swelling and lysis of the organelle membranes',points:['0.34 M sucrose matches the internal osmolarity of plant cells','Without sucrose (hypotonic): water enters organelles by osmosis, swelling and bursting them','Maintains structural integrity of chloroplast envelopes','Also keeps mitochondria intact']},
+{cat:'why',q:'Why are Bryophyllum leaves chosen as the source material for chloroplast isolation?',ans:'Because they are succulent leaves containing abundant, large mesophyll cells packed with chloroplasts',points:['Provides a very high yield of chloroplasts per gram of tissue','Succulent leaves are easy to shred and homogenize','Large chloroplast size (5–6 µm) makes them easy to pellet at 1,000 g','Makes microscopic observation under light microscopy easy']},
+{cat:'why',q:'Why are Iron salts (FeSO₄ and Na₂EDTA) prepared together as a chelated complex (Stock D)?',ans:'To prevent iron from precipitating as insoluble ferric hydroxide at physiological pH',points:['Free iron easily precipitates at pH 5.7–5.8','EDTA binds (chelates) iron, keeping it soluble and available to plant cells','Stock D is Macronutrient + EDTA complex','Provides a steady source of iron for chlorophyll synthesis']},
+{cat:'why',q:'Why must stock solutions of micronutrients and vitamins be stored at 4°C?',ans:'To prevent microbial contamination and slow down chemical degradation / oxidation',points:['Sugar, vitamins, and minerals are substrates for mold/bacteria','Refrigeration slows down micro-organism growth','Protects heat-sensitive vitamins (like Thiamine)','Stock D is also kept cool to prevent light-induced decomposition']},
+{cat:'why',q:'Why are auxins (like IAA, NAA, 2,4-D) first dissolved in 1N NaOH (or ethanol) instead of water?',ans:'Because auxin powders are hydrophobic and highly insoluble in neutral water',points:['Requires an alkaline solvent (1N NaOH) to break ionic bonds and dissolve','Once dissolved, water can be added to make up the final volume','Do not use excess NaOH as it raises pH too high','Ethanol can also be used as an alternative solvent']},
+{cat:'why',q:'Why are cytokinins (like BAP, Kinetin) first dissolved in 1N HCl instead of water?',ans:'Because cytokinins are basic compounds that are highly insoluble in neutral water',points:['Requires an acidic solvent (1N HCl) to protonate and dissolve the powder','Once fully dissolved, make up volume with distilled water','Keep volume of HCl as small as possible','Allows making a highly concentrated stock solution']},
+{cat:'why',q:'Why does half-strength MS medium often yield better rooting than full-strength MS?',ans:'Reduced salt concentration acts as a physiological stress signal that triggers root initiation',points:['High salt concentrations inhibit root elongation in vitro','Half-strength macronutrients decreases osmotic potential','Favours root cell elongation over cell division','Standard practice in micropropagation rooting phase']},
+{cat:'why',q:'Why must potting substrate be steam-sterilized before hardening plantlets?',ans:'To kill soil-borne fungal pathogens (like Pythium, Phytophthora) that destroy delicate roots',points:['In vitro roots have no defensive barrier or symbiotic protection','Delicate root systems are highly vulnerable to soil microbes','Steam sterilization (30 min) kills vegetative cells and spores','Crucial for achieving high ex vitro survival rates']},
+
+// ══════════════════════════════════════════════════════════════
+// 📋 PROCEDURE / SEQUENCE
+// ══════════════════════════════════════════════════════════════
+{cat:'seq',q:'Arrange the explant sterilization steps in correct order.',ans:'Tap water 30 min → Tween+Fungicide 20 min → DW wash ×3 → Clorox 15 min (×2) → DW wash → 70% ethanol 2 min → Sterile DW wash ×3',points:['Start with gross decontamination (tap water)','Fungicide (Captan) targets fungal spores','Clorox = primary chemical sterilant (2%)','70% ethanol is final chemical step before sterile rinse']},
+{cat:'seq',q:'What is the correct order of adding components when preparing 1 L of MS medium?',ans:'Water → Stock A → B → C → D → Growth regulators → Sugar → Adjust to 1L → Adjust pH → Add agar → Boil → Dispense → Autoclave',points:['Add stocks first while stirring','Dissolve sugar completely','Adjust pH BEFORE agar','Boil to dissolve agar → autoclave at 121°C, 15 psi']},
+{cat:'seq',q:'State the complete flow of plant tissue culture from explant to open field.',ans:'Explant selection → Sterilization → Inoculation → Callus induction → Callus multiplication → Shoot induction → Rooting → Primary hardening (75%) → Secondary hardening (50%) → Open field',points:['P01–P04: Lab safety, theory, equipment, media','P05–P07: Media formulation for each PTC stage','P08: Sterilization + inoculation','P09: Subculture | P10: Hardening']},
+{cat:'seq',q:'When cleaning LAF cabinet walls with ethanol, what direction must you wipe? Why?',ans:'Always INSIDE → OUTSIDE direction; NEVER reverse',points:['Wiping outside → inside drags external contaminants inward','Inside is cleanest → clean from sterile zone outward','Maintains the sterile gradient of the work zone','Same principle: always work close to you, don\'t reach over open vessels']},
+{cat:'seq',q:'What are the correct steps to use a pH meter?',ans:'Calibrate (pH 4, 7, 10) → Rinse with DW → Dip in sample → Wait for stable reading → Rinse → Store in KCl',points:['Calibrate before every use — mandatory','Wait for reading to stabilize before recording','Rinse with distilled water between samples','Store electrode in KCl solution (NOT distilled water)']},
+{cat:'seq',q:'What are the steps of the squash technique for onion root tips?',ans:'Fix in Carnoy\'s → Heat in HCl (60°C) → Rinse → Stain with Aceto-orcein → Place on slide → Cover and squash with thumb',points:['Maceration in HCl comes first to soften wall','Washing removes acid before staining','Squash gently using paper towel to absorb excess stain','Avoid lateral sliding of cover slip to prevent tearing cells']},
+{cat:'seq',q:'What is the correct way to place a leaf explant on agar during inoculation? Why?',ans:'Place abaxial (lower) surface facing down on the agar',points:['Stomata are concentrated on the abaxial side in dicots','Allows exchange of gases through the stomatal pores','Puts mesophyll cells in direct contact with nutrient agar','Improves uptake of growth regulators and sugar']},
+
+// ══════════════════════════════════════════════════════════════
+// 🚨 ERROR / TROUBLESHOOTING
+// ══════════════════════════════════════════════════════════════
+{cat:'error',q:'After inoculation, culture bottles show cloudy/coloured growth on agar after 1 week. What happened?',ans:'Microbial contamination — bacterial or fungal',points:['Possible causes: incomplete sterilization, poor LAF technique, contaminated tools','Pink/green/black growth = fungal contamination','Turbid medium = bacterial contamination','Action: discard all contaminated cultures; review aseptic technique']},
+{cat:'error',q:'After Clorox treatment, explant tissue is completely white/bleached throughout (not just margins). What went wrong?',ans:'Over-sterilization — Clorox too concentrated or exposure too long',points:['Standard: 2% Clorox for 15 minutes only','Prolonged treatment oxidises and kills all plant cells','Dead tissue will not establish in culture','Solution: reduce concentration, reduce time, or reduce temperature']},
+{cat:'error',q:'Your pH meter reads 7.0 even when dipped in a pH 4.0 buffer. Problem and solution?',ans:'Electrode not calibrated OR electrode is dried out / faulty',points:['Always calibrate with fresh buffer solutions before use','Dried electrode = cannot respond to H⁺ concentration','Check: is electrode stored in KCl solution?','If consistently wrong with fresh buffers: electrode needs replacement']},
+{cat:'error',q:'Hardened plantlets are wilting despite watering. What might be wrong?',ans:'Non-functional stomata (cannot regulate water loss) OR root rot from residual agar',points:['In vitro stomata = poorly developed; lose water rapidly in low humidity','Residual agar → fungal/bacterial root rot → plant cannot uptake water','Solution 1: maintain high humidity during primary hardening','Solution 2: ensure complete agar removal with 45°C warm water wash']},
+{cat:'error',q:'MS medium agar does not dissolve properly and stays cloudy. What went wrong?',ans:'Agar not boiled sufficiently OR not stirred during heating',points:['Agar must be boiled until solution becomes clear/transparent','Stir continuously while heating to prevent scorching','Agar needs sustained heat (3–5 min boiling) to dissolve fully','Add agar only after sugar is already dissolved']},
+{cat:'error',q:'In Practical 4, no results were reported for the mitochondrial fraction. Why did the experiment fail?',ans:'Due to the unavailability of Janus Green B stain on the day of the practical',points:['Mitochondria are double-membraned and too small (~1–2 µm) to see under light microscope without stain','Janus Green B is essential to visualize active mitochondria blue-green','Centrifugation at high speed was halted because staining could not be done','This is a critical practical limitation noted in your lab report']},
+{cat:'error',q:'Your agar medium does not solidify properly after cooling. What went wrong during preparation?',ans:'The pH was adjusted too low (acidic <5.0) or agar was not boiled/dissolved completely',points:['Acidic pH hydrolyses agar polysaccharide chains when heated','Preventing the gel network from cross-linking upon cooling','Ensure pH is adjusted to 5.7–5.8 precisely','Always boil agar until solution is clear before dispensing']},
+
+// ══════════════════════════════════════════════════════════════
+// 👁️ OBSERVATION RECORDING
+// ══════════════════════════════════════════════════════════════
+{cat:'obs',q:'Record the observation table for explant sterilization stages (Stage → What you observe).',ans:'See key points below for each stage',points:['After Tween+Fungicide: surface cleaner; solution slightly turbid','After Clorox: leaf margins bleached/whitened','After ethanol: no visible colour change; tissue intact','After cutting: 1×1 cm healthy green central pieces','After inoculation: flat on agar; sealed with Parafilm']},
+{cat:'obs',q:'What is observed in wash water when removing agar from plantlet roots at 45°C?',ans:'Water becomes slightly cloudy/turbid — confirms agar has dissolved and dispersed',points:['Turbidity = agar polysaccharide chains dispersed in water','Roots become visible as agar layer releases','Roots appear pale white/cream after agar removal','Continue washing until water runs clear']},
+{cat:'obs',q:'Describe what you expect to see in a onion root tip cell at METAPHASE stained with acetocarmine.',ans:'Chromosomes clearly visible, stained red/crimson, lined up in a flat plate at the cell\'s centre',points:['Chromosomes maximally condensed = most easily counted','Arranged at equatorial plate (middle of cell)','No nuclear envelope visible','Cell may appear slightly elongated; spindle not stained']},
+{cat:'obs',q:'Describe the observation when Lugol\'s iodine is added to a fresh potato cross-section.',ans:'Starch granules stain deep blue-black; solution surrounding them turns dark',points:['Blue-black = positive iodine-amylose complex','Amyloplasts clearly visible as dark blue-black granules','Background unstained tissue remains lighter colour','Large granules visible even at low (40×) magnification']},
+{cat:'obs',q:'Before hardening: roots have gel adhering. After 45°C wash — what do you record?',ans:'Roots clean and gel-free; wash water slightly turbid; roots pale white and fragile',points:['Agar dissolves and releases from roots at 45°C','Root system now clean and fully visible','Roots are very delicate — handle gently with forceps','Slight turbidity in water = successful agar removal confirmed']},
+{cat:'obs',q:'What is observed when Allium cepa epidermal peel cells undergo plasmolysis in 2 M sucrose?',ans:'The plasma membrane detaches from cell wall and shinks; central purple vacuole contracts',points:['2 M sucrose is strongly hypertonic (low water potential)','Efflux of water causes the central vacuole to shrink','The purple anthocyanin pigment makes the shrunken vacuole highly visible','Cell wall remains in place as it is rigid and freely permeable to sucrose']},
+{cat:'obs',q:'What is observed when Spirogyra filaments are viewed under 10× objective lens (100× total)?',ans:'Elongated, rectangular cylindrical cells arranged end-to-end in unbranched chains with spiral chloroplasts',points:['Distinct cellulose cell walls mark boundaries','Internal green spiral chloroplast bands running helically','May contain pyrenoid bodies (carbon-fixation protein complexes)','Wet mount preparation in water, no staining applied']},
+];
+
+let activeCards=[],currentIdx=0,isFlipped=false,scores={};
+
+function init(){
+  const cats=['colour','calc','micro','equip','diag','lookup','why','seq','error','obs'];
+  cats.forEach(c=>{
+    const n=CARDS.filter(x=>x.cat===c).length;
+    const el=document.getElementById('count-'+c);
+    if(el)el.textContent=n+' cards';
+  });
+  document.getElementById('count-all').textContent=CARDS.length+' cards total';
+}
+
+const META={
+  colour:{label:'🎨 Colour Differences',cls:'type-colour'},
+  calc:{label:'🧮 Calculations',cls:'type-calc'},
+  micro:{label:'🔭 Microscopic ID',cls:'type-micro'},
+  equip:{label:'🧰 Equipment ID',cls:'type-equip'},
+  diag:{label:'📊 Diagram Labelling',cls:'type-diag'},
+  lookup:{label:'🧪 Specimen ID',cls:'type-lookup'},
+  why:{label:'❓ Why / Rationale',cls:'type-why'},
+  seq:{label:'📋 Procedure',cls:'type-seq'},
+  error:{label:'🚨 Troubleshooting',cls:'type-error'},
+  obs:{label:'👁️ Observation',cls:'type-obs'},
+};
+
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function startCategory(cat){
+  activeCards=cat==='all'?shuffle([...CARDS]):shuffle(CARDS.filter(c=>c.cat===cat));
+  scores={};currentIdx=0;
+  document.getElementById('category-screen').style.display='none';
+  document.getElementById('flashcard-screen').style.display='block';
+  document.getElementById('completion').style.display='none';
+  document.getElementById('flip-container').style.display='';
+  document.querySelector('.flip-btn').style.display='';
+  document.querySelector('.btn-row').style.display='';
+  document.querySelector('.jump-row').style.display='';
+  renderCard('pop');
+}
+
+function goBack(){
+  document.getElementById('category-screen').style.display='block';
+  document.getElementById('flashcard-screen').style.display='none';
+  isFlipped=false;
+}
+
+function navigate(dir){
+  isFlipped=false;
+  document.getElementById('flip-container').classList.remove('flipped');
+  currentIdx+=dir;
+  if(currentIdx>=activeCards.length){showCompletion();return;}
+  if(currentIdx<0)currentIdx=0;
+  renderCard(dir>0?'right':'left');
+}
+
+function jumpTo(){
+  const n=parseInt(document.getElementById('jump-inp').value);
+  if(n>=1&&n<=activeCards.length){
+    isFlipped=false;
+    document.getElementById('flip-container').classList.remove('flipped');
+    currentIdx=n-1;renderCard('pop');
+  }
+}
+
+function flipCard(){
+  isFlipped=!isFlipped;
+  document.getElementById('flip-container').classList.toggle('flipped',isFlipped);
+  document.getElementById('score-row').style.display=isFlipped?'flex':'none';
+}
+
+function markCard(got){
+  scores[currentIdx]=got;updateScoreDisplay();navigate(1);
+}
+
+function updateScoreDisplay(){
+  const got=Object.values(scores).filter(v=>v).length;
+  const total=Object.keys(scores).length;
+  document.getElementById('score-display').textContent=total>0?`✓ ${got}/${total}`:'';
+}
+
+function renderCard(anim){
+  const card=activeCards[currentIdx];
+  const meta=META[card.cat];
+  const total=activeCards.length;
+  const num=currentIdx+1;
+  document.getElementById('counter-badge').textContent=num+'/'+total;
+  document.getElementById('prog-fill').style.width=((num/total)*100)+'%';
+  const lbl=document.getElementById('cat-label-display');
+  lbl.textContent=meta.label;lbl.className='cat-label '+meta.cls;
+  const front=document.getElementById('flip-front');
+  front.innerHTML=`<div class="q-type-badge ${meta.cls}">${meta.label}</div>
+    ${card.img?`<img class="card-img" src="${card.img}" alt="Lab image" onerror="this.style.display='none'">`:''} 
+    <div class="question-text">${card.q}</div>
+    <div class="flip-hint">👆 Tap card or button to reveal answer</div>`;
+  const back=document.getElementById('flip-back');
+  back.innerHTML=`<div class="ans-label">Answer</div>
+    <div class="answer-main">${card.ans}</div>
+    ${card.img?`<img class="back-img" src="${card.img}" alt="Lab image" onerror="this.style.display='none'">`:''} 
+    <ul class="answer-points">${card.points.map(p=>`<li>${p}</li>`).join('')}</ul>`;
+  isFlipped=false;
+  document.getElementById('flip-container').classList.remove('flipped');
+  document.getElementById('score-row').style.display='none';
+  const fc=document.getElementById('flip-container');
+  fc.classList.remove('anim-pop','anim-right','anim-left');
+  void fc.offsetWidth;
+  fc.classList.add(anim==='pop'?'anim-pop':anim==='right'?'anim-right':'anim-left');
+  document.getElementById('btn-prev').disabled=currentIdx===0;
+  document.getElementById('btn-next').textContent=currentIdx===total-1?'Finish ✓':'Next ▶';
+  updateScoreDisplay();
+}
+
+function showCompletion(){
+  document.getElementById('flip-container').style.display='none';
+  document.querySelector('.flip-btn').style.display='none';
+  document.getElementById('score-row').style.display='none';
+  document.querySelector('.btn-row').style.display='none';
+  document.querySelector('.jump-row').style.display='none';
+  const got=Object.values(scores).filter(v=>v).length;
+  const total=activeCards.length;
+  document.getElementById('completion').style.display='flex';
+  document.getElementById('completion-msg').textContent=`You scored ${got} / ${total} cards. ${got===total?'Perfect! 🌟':got>=total*0.8?'Great job! 💪':'Keep revising! 📚'}`;
+}
+
+function restartSet(){
+  scores={};currentIdx=0;
+  activeCards=shuffle([...activeCards]);isFlipped=false;
+  document.getElementById('flip-container').classList.remove('flipped');
+  document.getElementById('completion').style.display='none';
+  document.getElementById('flip-container').style.display='';
+  document.querySelector('.flip-btn').style.display='';
+  document.querySelector('.btn-row').style.display='';
+  document.querySelector('.jump-row').style.display='';
+  renderCard('pop');
+}
+
+init();
+</script>
+</body>
+</html>
